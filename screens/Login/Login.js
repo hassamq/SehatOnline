@@ -14,7 +14,6 @@ import FontSize from "../../Constants/FontSize";
 import Colors from "../../Constants/colors";
 import Fonts from "../../Constants/Fonts";
 import AppTextInput from "../../components/AppTextInput";
-import AppToast from "../../components/AppToast";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 const Login = ({ navigation }) => {
@@ -61,7 +60,6 @@ const Login = ({ navigation }) => {
         navigation.navigate("Home");
       } else {
         console.log("Failed");
-        <AppToast message="Failed!" />;
       }
     }
   };
