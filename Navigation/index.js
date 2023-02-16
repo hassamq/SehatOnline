@@ -8,6 +8,7 @@ import Colors from "../Constants/colors";
 import WelcomeScreen from "../screens/WelcomeScreen/WelcomeScreen";
 import Login from "../screens/Login/Login";
 import Register from "../screens/Register/Register";
+import MainHome from "../screens/Home/Home";
 
 const theme = {
   ...DefaultTheme,
@@ -29,6 +30,7 @@ function App() {
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen name="Home" component={MainHome} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -19,6 +19,7 @@ const AppTextInput = ({ ...otherProps }) => {
       onFocus={() => setFocused(true)}
       onBlur={() => setFocused(false)}
       placeholderTextColor={Colors.darkText}
+      keyboardAppearance="dark"
       {...otherProps}
       style={[
         {

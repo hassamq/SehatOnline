@@ -7,16 +7,67 @@ import {
   TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import Spacing from "../../Constants/spacing";
 import FontSize from "../../Constants/FontSize";
 import Colors from "../../Constants/colors";
 import Fonts from "../../Constants/Fonts";
 import AppTextInput from "../../components/AppTextInput";
+import AppToast from "../../components/AppToast";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const Login = ({ navigation }) => {
+  const handlePress = () => {
+    Keyboard.dismiss();
+  };
+
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
+  const [emailError, setEmailError] = React.useState("");
+  const [passwordError, setPasswordError] = React.useState("");
+
+  const validateEmail = (email) => {
+    // A basic email validation function
+    const emailRegex = /\S+@\S+\.\S+/;
+    if (email === "") {
+      setEmailError("");
+    } else if (!emailRegex.test(email)) {
+      setEmailError("Invalid email address");
+    } else {
+      setEmailError("");
+    }
+  };
+
+  const validatePassword = (password) => {
+    // A basic password validation function
+    if (password === "") {
+      setPasswordError("");
+    } else if (password.length < 8) {
+      setPasswordError("Password must be at least 8 characters long");
+    } else {
+      setPasswordError("");
+    }
+  };
+
+  const Submit_btn = () => {
+    if (email === "" || password === "") {
+      alert("Enter all info");
+    } else if (!emailError && !passwordError) {
+      // Perform the form submission here
+      if (email === "hassamq59@gmail.com" && password === "12345678") {
+        // console.log("Success!");
+        navigation.navigate("Home");
+      } else {
+        console.log("Failed");
+        <AppToast message="Failed!" />;
+      }
+    }
+  };
+
   return (
-    <TouchableWithoutFeedback>
+    <TouchableWithoutFeedback onPress={handlePress}>
       <SafeAreaView>
         <View style={styles.view1}>
           <View style={styles.view2}>
@@ -25,8 +76,23 @@ const Login = ({ navigation }) => {
           </View>
 
           <View style={{ marginVertical: Spacing * 3 }}>
-            <AppTextInput placeholder="Email" />
-            <AppTextInput placeholder="Password" secureTextEntry />
+            <AppTextInput
+              placeholder="Email"
+              onChangeText={(text) => {
+                setEmail(text);
+                validateEmail(text);
+              }}
+            />
+            <Text style={styles.errorText}>{emailError}</Text>
+            <AppTextInput
+              placeholder="Password"
+              onChangeText={(text) => {
+                setPassword(text);
+                validatePassword(text);
+              }}
+              secureTextEntry
+            />
+            <Text style={styles.errorText}>{passwordError}</Text>
           </View>
 
           <View>
@@ -48,7 +114,9 @@ const Login = ({ navigation }) => {
               shadowOpacity: 0.3,
             }}
           >
-            <Text style={styles.signinbtn}>Sign in</Text>
+            <Text style={styles.signinbtn} onPress={Submit_btn}>
+              Sign in
+            </Text>
           </TouchableOpacity>
 
           {/* Sign up */}
@@ -77,14 +145,17 @@ const Login = ({ navigation }) => {
                 justifyContent: "center",
               }}
             >
-              <TouchableOpacity
-                style={{
-                  padding: Spacing,
-                  backgroundColor: Colors.gray,
-                  borderRadius: Spacing / 2,
-                  marginHorizontal: Spacing,
-                }}
-              ></TouchableOpacity>
+              <TouchableOpacity style={styles.social_icons}>
+                <Icon name="google" size={Spacing * 2} color={Colors.text} />
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.social_icons}>
+                <Icon name="apple" size={Spacing * 2} color={Colors.text} />
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.social_icons}>
+                <Icon name="facebook" size={Spacing * 2} color={Colors.text} />
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -144,5 +215,18 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     textAlign: "center",
     fontSize: FontSize.small,
+  },
+
+  social_icons: {
+    padding: Spacing,
+    backgroundColor: Colors.gray,
+    borderRadius: Spacing / 2,
+    marginHorizontal: Spacing,
+  },
+  errorText: {
+    color: "red",
+    fontFamily: Fonts["poppins-regular"],
+    fontSize: FontSize.small,
+    marginLeft: 6.5,
   },
 });

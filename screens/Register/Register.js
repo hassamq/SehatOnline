@@ -6,86 +6,181 @@ import {
   SafeAreaView,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import Spacing from "../../Constants/spacing";
 import FontSize from "../../Constants/FontSize";
 import Colors from "../../Constants/colors";
 import Fonts from "../../Constants/Fonts";
 import AppTextInput from "../../components/AppTextInput";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const Register = ({ navigation }) => {
+  const handlePress = () => {
+    Keyboard.dismiss();
+  };
+
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
+  const [emailError, setEmailError] = React.useState("");
+  const [passwordError, setPasswordError] = React.useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = React.useState("");
+
+  const validateEmail = (email) => {
+    // A basic email validation function
+    const emailRegex = /\S+@\S+\.\S+/;
+    if (email === "") {
+      setEmailError("");
+    } else if (!emailRegex.test(email)) {
+      setEmailError("Invalid email address");
+    } else {
+      setEmailError("");
+    }
+  };
+
+  const validatePassword = (password) => {
+    // A basic password validation function
+    if (password === "") {
+      setPasswordError("");
+    } else if (password.length < 8) {
+      setPasswordError("Password must be at least 8 characters long");
+    } else {
+      setPasswordError("");
+    }
+  };
+
+  const validateConfirmPassword = (confirmPassword) => {
+    if (confirmPassword === "") {
+      setConfirmPasswordError("");
+    } else if (confirmPassword !== password) {
+      setConfirmPasswordError("Passwords do not match");
+    } else {
+      setConfirmPasswordError("");
+    }
+  };
+
+  const Submit_btn = () => {
+    if (email === "" || password === "" || confirmPassword === "") {
+      alert("Enter all info");
+    } else if (!emailError && !passwordError && !confirmPasswordError) {
+      console.log("Success!");
+      // Perform the form submission here
+      navigation.navigate("Home");
+    }
+  };
+
   return (
-    <SafeAreaView>
-      <View style={styles.view1}>
-        <View style={styles.view2}>
-          <Text style={styles.txt1}>Create account</Text>
-          <Text style={styles.txt2}>
-            Create an account so you can explore all the features
-          </Text>
-        </View>
+    <TouchableWithoutFeedback onPress={handlePress}>
+      <SafeAreaView>
+        <View style={styles.view1}>
+          <View style={styles.view2}>
+            <Text style={styles.txt1}>Create account</Text>
+            <Text style={styles.txt2}>
+              Create an account so you can explore all the features
+            </Text>
+          </View>
 
-        <View style={{ marginVertical: Spacing * 3 }}>
-          <AppTextInput placeholder="Email" />
-          <AppTextInput placeholder="Password" secureTextEntry />
-          <AppTextInput placeholder="Confirm Password" secureTextEntry />
-        </View>
+          <View style={{ marginVertical: Spacing * 3 }}>
+            <AppTextInput
+              placeholder="Email"
+              onChangeText={(text) => {
+                setEmail(text);
+                validateEmail(text);
+              }}
+            />
+            <Text style={styles.errorText}>{emailError}</Text>
 
-        {/* Sign up */}
-        <TouchableOpacity
-          style={{
-            padding: Spacing * 2,
-            backgroundColor: Colors.primary,
-            marginVertical: Spacing * 3,
-            borderRadius: Spacing,
-            shadowColor: Colors.primary,
-            shadowOffset: {
-              width: 0,
-              height: Spacing,
-            },
-            shadowOpacity: 0.3,
-          }}
-        >
-          <Text style={styles.signinbtn}>Sign up</Text>
-        </TouchableOpacity>
+            <AppTextInput
+              placeholder="Password"
+              onChangeText={(text) => {
+                setPassword(text);
+                validatePassword(text);
+              }}
+              secureTextEntry
+            />
+            <Text style={styles.errorText}>{passwordError}</Text>
+            <AppTextInput
+              placeholder="Confirm Password"
+              onChangeText={(text) => {
+                setConfirmPassword(text);
+                validateConfirmPassword(text);
+              }}
+              secureTextEntry
+            />
+            <Text style={styles.errorText}>{confirmPasswordError}</Text>
+          </View>
 
-        {/* Sign up */}
-
-        <TouchableOpacity
-          style={{
-            padding: Spacing * 0.2,
-          }}
-        >
-          <Text
-            style={styles.signupbtn}
-            onPress={() => navigation.navigate("Login")}
-          >
-            Already have an account
-          </Text>
-        </TouchableOpacity>
-
-        {/* Other accounts */}
-        <View>
-          <Text style={styles.otherbtn}>Or continue with</Text>
-
-          <View
+          {/* Sign up */}
+          <TouchableOpacity
             style={{
-              marginTop: Spacing,
-              flexDirection: "row",
-              justifyContent: "center",
+              padding: Spacing * 2,
+              backgroundColor: Colors.primary,
+              marginVertical: Spacing * 3,
+              borderRadius: Spacing,
+              shadowColor: Colors.primary,
+              marginTop: -10,
+              shadowOffset: {
+                width: 0,
+                height: Spacing,
+              },
+              shadowOpacity: 0.3,
             }}
           >
-            <TouchableOpacity
+            <Text
+              style={styles.signinbtn}
+              disabled={
+                !!emailError || !!passwordError || !!confirmPasswordError
+              }
+              onPress={Submit_btn}
+            >
+              Sign up
+            </Text>
+          </TouchableOpacity>
+
+          {/* Sign in */}
+
+          <TouchableOpacity
+            style={{
+              padding: Spacing * 0.2,
+            }}
+          >
+            <Text
+              style={styles.signupbtn}
+              onPress={() => navigation.navigate("Login")}
+            >
+              Already have an account
+            </Text>
+          </TouchableOpacity>
+
+          {/* Other accounts */}
+          <View>
+            <Text style={styles.otherbtn}>Or continue with</Text>
+
+            <View
               style={{
-                padding: Spacing,
-                backgroundColor: Colors.gray,
-                borderRadius: Spacing / 2,
-                marginHorizontal: Spacing,
+                marginTop: Spacing,
+                flexDirection: "row",
+                justifyContent: "center",
               }}
-            ></TouchableOpacity>
+            >
+              <TouchableOpacity style={styles.social_icons}>
+                <Icon name="google" size={Spacing * 2} color={Colors.text} />
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.social_icons}>
+                <Icon name="apple" size={Spacing * 2} color={Colors.text} />
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.social_icons}>
+                <Icon name="facebook" size={Spacing * 2} color={Colors.text} />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -140,5 +235,18 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     textAlign: "center",
     fontSize: FontSize.small,
+  },
+
+  social_icons: {
+    padding: Spacing,
+    backgroundColor: Colors.gray,
+    borderRadius: Spacing / 2,
+    marginHorizontal: Spacing,
+  },
+  errorText: {
+    color: "red",
+    fontFamily: Fonts["poppins-regular"],
+    fontSize: FontSize.small,
+    marginLeft: 6.5,
   },
 });
