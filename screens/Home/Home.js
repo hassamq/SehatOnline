@@ -7,6 +7,8 @@ import {
   ImageBackground,
   FlatList,
   TextInput,
+  StatusBar,
+  TouchableOpacity,
 } from "react-native";
 import React from "react";
 
@@ -16,10 +18,75 @@ import Colors from "../../Constants/colors";
 import Fonts from "../../Constants/Fonts";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { ScrollView } from "react-native-gesture-handler";
-import Card from "../../components/Card";
+import Card from "./Card";
+import DoctorCard from "./DoctorCard";
 import { LinearGradient } from "expo-linear-gradient";
 
 export default function Home({ navigation }) {
+  const Doctordata = [
+    {
+      id: "1",
+      name: "Dr. John Doe",
+      specialization: "Cardiologist",
+      image:
+        "https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    },
+    {
+      id: "2",
+      name: "Dr. Jane Smith",
+      specialization: "Dermatologist",
+      image:
+        "https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    },
+    {
+      id: "3",
+      name: "Dr. Mike Johnson",
+      specialization: "Pediatrician",
+      image:
+        "https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    },
+    {
+      id: "4",
+      name: "Dr. Emily Jones",
+      specialization: "Ophthalmologist",
+      image:
+        "https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    },
+  ];
+
+  const data = [
+    {
+      id: "1",
+      title: "Online Consultation",
+      description: "Get consultation from doctors online",
+      iconName: "user-md",
+    },
+    {
+      id: "2",
+      title: "Home Sampling for Tests",
+      description: "Get your samples collected from home",
+      iconName: "home",
+    },
+    {
+      id: "3",
+      title: "Book Lab Tests",
+      description: "Book lab tests at your convenience",
+      iconName: "calendar",
+    },
+    {
+      id: "4",
+      title: "Medicine Delivery",
+      description: "Get your medicines delivered to your doorstep",
+      iconName: "medkit",
+    },
+    {
+      id: "5",
+      title: "Symptoms Checker",
+      description: "Check your symptoms and get recommendations",
+      iconName: "stethoscope",
+    },
+  ];
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
@@ -123,6 +190,8 @@ export default function Home({ navigation }) {
         </View>
         {/* Banner End */}
 
+        {/* Explore More */}
+
         <View style={styles.container1}>
           <FlatList
             data={data}
@@ -142,43 +211,44 @@ export default function Home({ navigation }) {
             maxToRenderPerBatch={3}
           />
         </View>
+
+        {/* Doctors */}
+
+        <View style={{ marginHorizontal: "6%", marginTop: Spacing }}>
+          <View style={styles.headingContainer}>
+            <Text
+              style={{
+                fontFamily: Fonts["poppins-bold"],
+                FontSize: FontSize.xxLarge,
+              }}
+            >
+              Doctors
+            </Text>
+            <TouchableOpacity>
+              <Text style={styles.viewAll}>View All</Text>
+            </TouchableOpacity>
+          </View>
+
+          <FlatList
+            horizontal
+            data={Doctordata}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <View style={styles.DoctorcardContainer}>
+                <DoctorCard
+                  name={item.name}
+                  specialization={item.specialization}
+                  image={item.image}
+                />
+              </View>
+            )}
+            showsHorizontalScrollIndicator={false}
+          />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
-
-const data = [
-  {
-    id: "1",
-    title: "Online Consultation",
-    description: "Get consultation from doctors online",
-    iconName: "user-md",
-  },
-  {
-    id: "2",
-    title: "Home Sampling for Tests",
-    description: "Get your samples collected from home",
-    iconName: "home",
-  },
-  {
-    id: "3",
-    title: "Book Lab Tests",
-    description: "Book lab tests at your convenience",
-    iconName: "calendar",
-  },
-  {
-    id: "4",
-    title: "Medicine Delivery",
-    description: "Get your medicines delivered to your doorstep",
-    iconName: "medkit",
-  },
-  {
-    id: "5",
-    title: "Symptoms Checker",
-    description: "Check your symptoms and get recommendations",
-    iconName: "stethoscope",
-  },
-];
 
 const styles = StyleSheet.create({
   container: {
@@ -266,5 +336,27 @@ const styles = StyleSheet.create({
     height: 40,
     marginLeft: 10,
     fontSize: 16,
+  },
+  headingContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginHorizontal: 10,
+    marginVertical: 5,
+  },
+  heading: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#2596be",
+  },
+  viewAll: {
+    fontSize: 16,
+    color: "#2596be",
+  },
+  DoctorcardContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    // paddingHorizontal: 10,
+    width: 200,
   },
 });

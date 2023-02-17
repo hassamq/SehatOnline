@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import Spacing from "../Constants/spacing";
-import FontSize from "../Constants/FontSize";
-import Colors from "../Constants/colors";
-import Fonts from "../Constants/Fonts";
+import Spacing from "../../Constants/spacing";
+import FontSize from "../../Constants/FontSize";
+import Colors from "../../Constants/colors";
+import Fonts from "../../Constants/Fonts";
 
 const Card = (props) => {
   return (
