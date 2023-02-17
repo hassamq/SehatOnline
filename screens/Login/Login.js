@@ -15,6 +15,7 @@ import Colors from "../../Constants/colors";
 import Fonts from "../../Constants/Fonts";
 import AppTextInput from "../../components/AppTextInput";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { ScrollView } from "react-native-gesture-handler";
 
 const Login = ({ navigation }) => {
   const handlePress = () => {
@@ -67,96 +68,102 @@ const Login = ({ navigation }) => {
   return (
     <TouchableWithoutFeedback onPress={handlePress}>
       <SafeAreaView>
-        <View style={styles.view1}>
-          <View style={styles.view2}>
-            <Text style={styles.txt1}>Login here</Text>
-            <Text style={styles.txt2}>Welcome back you've been missed!</Text>
-          </View>
+        <ScrollView>
+          <View style={styles.view1}>
+            <View style={styles.view2}>
+              <Text style={styles.txt1}>Login here</Text>
+              <Text style={styles.txt2}>Welcome back you've been missed!</Text>
+            </View>
 
-          <View style={{ marginVertical: Spacing * 3 }}>
-            <AppTextInput
-              placeholder="Email"
-              onChangeText={(text) => {
-                setEmail(text);
-                validateEmail(text);
-              }}
-            />
-            <Text style={styles.errorText}>{emailError}</Text>
-            <AppTextInput
-              placeholder="Password"
-              onChangeText={(text) => {
-                setPassword(text);
-                validatePassword(text);
-              }}
-              secureTextEntry
-            />
-            <Text style={styles.errorText}>{passwordError}</Text>
-          </View>
+            <View style={{ marginVertical: Spacing * 3 }}>
+              <AppTextInput
+                placeholder="Email"
+                onChangeText={(text) => {
+                  setEmail(text);
+                  validateEmail(text);
+                }}
+              />
+              <Text style={styles.errorText}>{emailError}</Text>
+              <AppTextInput
+                placeholder="Password"
+                onChangeText={(text) => {
+                  setPassword(text);
+                  validatePassword(text);
+                }}
+                secureTextEntry
+              />
+              <Text style={styles.errorText}>{passwordError}</Text>
+            </View>
 
-          <View>
-            <Text style={styles.forgotpswd}>Forgot your Password?</Text>
-          </View>
+            <View>
+              <Text style={styles.forgotpswd}>Forgot your Password?</Text>
+            </View>
 
-          {/* Sign in */}
-          <TouchableOpacity
-            style={{
-              padding: Spacing * 2,
-              backgroundColor: Colors.primary,
-              marginVertical: Spacing * 3,
-              borderRadius: Spacing,
-              shadowColor: Colors.primary,
-              shadowOffset: {
-                width: 0,
-                height: Spacing,
-              },
-              shadowOpacity: 0.3,
-            }}
-          >
-            <Text style={styles.signinbtn} onPress={Submit_btn}>
-              Sign in
-            </Text>
-          </TouchableOpacity>
-
-          {/* Sign up */}
-
-          <TouchableOpacity
-            style={{
-              padding: Spacing * 0.2,
-            }}
-          >
-            <Text
-              style={styles.signupbtn}
-              onPress={() => navigation.navigate("Register")}
-            >
-              Create new account
-            </Text>
-          </TouchableOpacity>
-
-          {/* Other accounts */}
-          <View>
-            <Text style={styles.otherbtn}>Or continue with</Text>
-
-            <View
+            {/* Sign in */}
+            <TouchableOpacity
               style={{
-                marginTop: Spacing,
-                flexDirection: "row",
-                justifyContent: "center",
+                padding: Spacing * 2,
+                backgroundColor: Colors.primary,
+                marginVertical: Spacing * 3,
+                borderRadius: Spacing,
+                shadowColor: Colors.primary,
+                shadowOffset: {
+                  width: 0,
+                  height: Spacing,
+                },
+                shadowOpacity: 0.3,
               }}
             >
-              <TouchableOpacity style={styles.social_icons}>
-                <Icon name="google" size={Spacing * 2} color={Colors.text} />
-              </TouchableOpacity>
+              <Text style={styles.signinbtn} onPress={Submit_btn}>
+                Sign in
+              </Text>
+            </TouchableOpacity>
 
-              <TouchableOpacity style={styles.social_icons}>
-                <Icon name="apple" size={Spacing * 2} color={Colors.text} />
-              </TouchableOpacity>
+            {/* Sign up */}
 
-              <TouchableOpacity style={styles.social_icons}>
-                <Icon name="facebook" size={Spacing * 2} color={Colors.text} />
-              </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                padding: Spacing * 0.2,
+              }}
+            >
+              <Text
+                style={styles.signupbtn}
+                onPress={() => navigation.navigate("Register")}
+              >
+                Create new account
+              </Text>
+            </TouchableOpacity>
+
+            {/* Other accounts */}
+            <View>
+              <Text style={styles.otherbtn}>Or continue with</Text>
+
+              <View
+                style={{
+                  marginTop: Spacing,
+                  flexDirection: "row",
+                  justifyContent: "center",
+                }}
+              >
+                <TouchableOpacity style={styles.social_icons}>
+                  <Icon name="google" size={Spacing * 2} color={Colors.text} />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.social_icons}>
+                  <Icon name="apple" size={Spacing * 2} color={Colors.text} />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.social_icons}>
+                  <Icon
+                    name="facebook"
+                    size={Spacing * 2}
+                    color={Colors.text}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
+        </ScrollView>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );

@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  ScrollView,
 } from "react-native";
 import Spacing from "../../Constants/spacing";
 import FontSize from "../../Constants/FontSize";
@@ -74,111 +75,117 @@ const Register = ({ navigation }) => {
   return (
     <TouchableWithoutFeedback onPress={handlePress}>
       <SafeAreaView>
-        <View style={styles.view1}>
-          <View style={styles.view2}>
-            <Text style={styles.txt1}>Create account</Text>
-            <Text style={styles.txt2}>
-              Create an account so you can explore all the features
-            </Text>
-          </View>
+        <ScrollView>
+          <View style={styles.view1}>
+            <View style={styles.view2}>
+              <Text style={styles.txt1}>Create account</Text>
+              <Text style={styles.txt2}>
+                Create an account so you can explore all the features
+              </Text>
+            </View>
 
-          <View style={{ marginVertical: Spacing * 3 }}>
-            <AppTextInput
-              placeholder="Email"
-              onChangeText={(text) => {
-                setEmail(text);
-                validateEmail(text);
-              }}
-            />
-            <Text style={styles.errorText}>{emailError}</Text>
+            <View style={{ marginVertical: Spacing * 3 }}>
+              <AppTextInput
+                placeholder="Email"
+                onChangeText={(text) => {
+                  setEmail(text);
+                  validateEmail(text);
+                }}
+              />
+              <Text style={styles.errorText}>{emailError}</Text>
 
-            <AppTextInput
-              placeholder="Password"
-              onChangeText={(text) => {
-                setPassword(text);
-                validatePassword(text);
-              }}
-              secureTextEntry
-            />
-            <Text style={styles.errorText}>{passwordError}</Text>
-            <AppTextInput
-              placeholder="Confirm Password"
-              onChangeText={(text) => {
-                setConfirmPassword(text);
-                validateConfirmPassword(text);
-              }}
-              secureTextEntry
-            />
-            <Text style={styles.errorText}>{confirmPasswordError}</Text>
-          </View>
+              <AppTextInput
+                placeholder="Password"
+                onChangeText={(text) => {
+                  setPassword(text);
+                  validatePassword(text);
+                }}
+                secureTextEntry
+              />
+              <Text style={styles.errorText}>{passwordError}</Text>
+              <AppTextInput
+                placeholder="Confirm Password"
+                onChangeText={(text) => {
+                  setConfirmPassword(text);
+                  validateConfirmPassword(text);
+                }}
+                secureTextEntry
+              />
+              <Text style={styles.errorText}>{confirmPasswordError}</Text>
+            </View>
 
-          {/* Sign up */}
-          <TouchableOpacity
-            style={{
-              padding: Spacing * 2,
-              backgroundColor: Colors.primary,
-              marginVertical: Spacing * 3,
-              borderRadius: Spacing,
-              shadowColor: Colors.primary,
-              marginTop: -10,
-              shadowOffset: {
-                width: 0,
-                height: Spacing,
-              },
-              shadowOpacity: 0.3,
-            }}
-          >
-            <Text
-              style={styles.signinbtn}
-              disabled={
-                !!emailError || !!passwordError || !!confirmPasswordError
-              }
-              onPress={Submit_btn}
-            >
-              Sign up
-            </Text>
-          </TouchableOpacity>
-
-          {/* Sign in */}
-
-          <TouchableOpacity
-            style={{
-              padding: Spacing * 0.2,
-            }}
-          >
-            <Text
-              style={styles.signupbtn}
-              onPress={() => navigation.navigate("Login")}
-            >
-              Already have an account
-            </Text>
-          </TouchableOpacity>
-
-          {/* Other accounts */}
-          <View>
-            <Text style={styles.otherbtn}>Or continue with</Text>
-
-            <View
+            {/* Sign up */}
+            <TouchableOpacity
               style={{
-                marginTop: Spacing,
-                flexDirection: "row",
-                justifyContent: "center",
+                padding: Spacing * 2,
+                backgroundColor: Colors.primary,
+                marginVertical: Spacing * 3,
+                borderRadius: Spacing,
+                shadowColor: Colors.primary,
+                marginTop: -10,
+                shadowOffset: {
+                  width: 0,
+                  height: Spacing,
+                },
+                shadowOpacity: 0.3,
               }}
             >
-              <TouchableOpacity style={styles.social_icons}>
-                <Icon name="google" size={Spacing * 2} color={Colors.text} />
-              </TouchableOpacity>
+              <Text
+                style={styles.signinbtn}
+                disabled={
+                  !!emailError || !!passwordError || !!confirmPasswordError
+                }
+                onPress={Submit_btn}
+              >
+                Sign up
+              </Text>
+            </TouchableOpacity>
 
-              <TouchableOpacity style={styles.social_icons}>
-                <Icon name="apple" size={Spacing * 2} color={Colors.text} />
-              </TouchableOpacity>
+            {/* Sign in */}
 
-              <TouchableOpacity style={styles.social_icons}>
-                <Icon name="facebook" size={Spacing * 2} color={Colors.text} />
-              </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                padding: Spacing * 0.2,
+              }}
+            >
+              <Text
+                style={styles.signupbtn}
+                onPress={() => navigation.navigate("Login")}
+              >
+                Already have an account
+              </Text>
+            </TouchableOpacity>
+
+            {/* Other accounts */}
+            <View>
+              <Text style={styles.otherbtn}>Or continue with</Text>
+
+              <View
+                style={{
+                  marginTop: Spacing,
+                  flexDirection: "row",
+                  justifyContent: "center",
+                }}
+              >
+                <TouchableOpacity style={styles.social_icons}>
+                  <Icon name="google" size={Spacing * 2} color={Colors.text} />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.social_icons}>
+                  <Icon name="apple" size={Spacing * 2} color={Colors.text} />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.social_icons}>
+                  <Icon
+                    name="facebook"
+                    size={Spacing * 2}
+                    color={Colors.text}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
+        </ScrollView>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );

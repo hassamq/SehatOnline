@@ -22,7 +22,7 @@ const WelcomeScreen = ({ navigation }) => {
       <View>
         <ImageBackground
           style={{ height: height / 2.5 }}
-          resizeMethod="contain"
+          // resizeMethod="contain"
           source={require("../../assets/images/Welcome.png")}
         />
       </View>
@@ -107,13 +107,13 @@ const styles = StyleSheet.create({
   },
 
   loginbtn: {
-    fontSize: FontSize.Large,
+    fontSize: FontSize.large,
     color: Colors.onPrimary,
     fontFamily: Fonts["poppins-bold"],
     textAlign: "center",
   },
   registerbtn: {
-    fontSize: FontSize.Large,
+    fontSize: FontSize.large,
     color: Colors.text,
     fontFamily: Fonts["poppins-bold"],
     textAlign: "center",
