@@ -1,9 +1,9 @@
 import * as React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import Colors from "../Constants/colors";
@@ -13,7 +13,7 @@ import Login from "../screens/Login/Login";
 import Register from "../screens/Register/Register";
 import MainHome from "../screens/Home/Home";
 
-import Sidebar from "../components/Sidebar";
+import CustomDrawer from "../components/CustomDrawer";
 
 const theme = {
   ...DefaultTheme,
@@ -32,12 +32,16 @@ function StackNavigator() {
     <NavigationContainer independent={true} theme={theme}>
       <Stack.Navigator
         initialRouteName="Welcome"
-        screenOptions={{ headerShown: false, gestureEnabled: true }}
+        screenOptions={{ headerShown: false, gestureEnabled: false }}
       >
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="DrawerMenu" component={DrawerMenu} />
+        <Stack.Screen
+          name="DrawerMenu"
+          component={DrawerMenu}
+          options={{ gestureEnabled: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -62,82 +66,140 @@ export const DrawerMenu = ({ navigation, route }) => {
   return (
     <NavigationContainer independent={true} theme={theme}>
       <Drawer.Navigator
-        // screenOptions={{
-        //   drawerType: "front",
-        //   // headerShown: false,
-        //   gestureEnabled: true,
-        //   drawerLabel: "as",
-
-        //   swipeEdgeWidth: 0,
-        //   drawerStyle: {
-        //     width: "70%",
-        //     borderBottomRightRadius: 12,
-        //     borderTopRightRadius: 12,
-        //   },
-        //   overlayColor: "rgba(0,0,0,.5)",
-        // }}
+        drawerContent={(props) => <CustomDrawer {...props} />}
         screenOptions={{ headerShown: false }}
-        drawerContent={(props) => <Sidebar {...props} />}
       >
-        <Drawer.Screen name="HomeDrawer" component={BottomTabNavigation} />
+        <Drawer.Screen
+          name="Home"
+          component={BottomTabNavigation}
+          label="Home"
+        />
+
+        <Drawer.Screen name="Profile" component={MainHome} label="Profile" />
+
+        <Drawer.Screen
+          name="Appointment"
+          component={MainHome}
+          label="Appointment"
+        />
+        <Drawer.Screen name="Settings" component={MainHome} label="Settings" />
       </Drawer.Navigator>
     </NavigationContainer>
   );
 };
 
 export const BottomTabNavigation = ({ navigation, route }) => {
+  const activeTintColor = "black";
+  const inactiveTintColor = "black";
+
   return (
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={({ route }) => ({
+        headerShown: false, // remove header for all screens
+
         tabBarIcon: ({ focused, color, size }) => {
+          let iconImage;
           let iconName;
 
           if (route.name === "Home") {
             iconName = "home";
           } else if (route.name === "Profile") {
-            iconName = "account";
+            iconName = "user";
+          } else if (route.name === "1") {
+            iconImage = require("../assets/images/icon.png");
+          } else if (route.name === "Appointment") {
+            iconName = "book";
+          } else if (route.name === "Settings") {
+            iconName = "gear";
           }
 
-          return (
-            <MaterialCommunityIcons name={iconName} size={size} color="#fff" />
-          );
+          if (iconName) {
+            return <FontAwesome name={iconName} size={size} color={color} />;
+          } else if (iconImage) {
+            return (
+              <Image
+                source={iconImage}
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 50,
+                  padding: 5,
+                  marginTop: -30,
+                }}
+              />
+            );
+          } else {
+            return null;
+          }
         },
-        tabBarActiveTintColor: "#fff",
-        tabBarInactiveTintColor: "gray",
-        tabBarStyle: styles.tabBar,
-        labelStyle: styles.label,
+        tabBarActiveTintColor: activeTintColor,
+        tabBarInactiveTintColor: inactiveTintColor,
+        tabBarStyle: {
+          backgroundColor: "#ededed",
+          borderTopWidth: 0,
+          height: 60,
+          margin: 10,
+          marginHorizontal: 35,
+          padding: 10,
+          borderRadius: 30,
+          shadowColor: "#000",
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
+        },
+        tabBarLabelStyle: {
+          display: "none",
+        },
+        tabBarIconStyle: {
+          marginBottom: -10,
+        },
+        shadowStyle: {
+          shadowColor: "#000",
+          shadowOffset: {
+            width: 0,
+            height: -2,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+
+          elevation: 5,
+        },
       })}
     >
-      <Tab.Screen name="Home" component={MainHome} />
-      <Tab.Screen name="Profile" component={MainHome} />
+      <Tab.Screen
+        name="Home"
+        component={MainHome}
+        options={{ tabBarLabel: "Home" }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={MainHome}
+        options={{ tabBarLabel: "Profile" }}
+      />
+      <Tab.Screen
+        name="1"
+        component={MainHome}
+        options={{ tabBarLabel: "1" }}
+      />
+      <Tab.Screen
+        name="Appointment"
+        component={MainHome}
+        options={{ tabBarLabel: "Appointment" }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={MainHome}
+        options={{ tabBarLabel: "" }}
+      />
     </Tab.Navigator>
   );
 };
 
-const styles = StyleSheet.create({
-  // tabBar: {
-  //   alignSelf: "center",
-  //   backgroundColor: Colors.primary,
-  //   borderTopWidth: 1,
-  //   borderTopColor: "#dcdcdc",
-  //   height: 60,
-  //   width: "90%",
-  //   paddingTop: 5,
-  //   borderRadius: 50,
-  //   shadowColor: Colors.text,
-  //   shadowOffset: {
-  //     width: 100,
-  //     height: 100,
-  //   },
-  //   shadowOpacity: 0.8,
-  //   shadowRadius: 3.84,
-  //   elevation: 5,
-  // },
-  // label: {
-  //   fontSize: 12,
-  //   marginBottom: 5,
-  // },
-});
+const styles = StyleSheet.create({});
 
 export default StackNavigator;

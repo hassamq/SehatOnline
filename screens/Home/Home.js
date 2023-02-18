@@ -123,21 +123,21 @@ export default function Home({ navigation }) {
         </View>
       </View>
       {/* Header end */}
-      {/* Search */}
-      <View style={styles.searchcontainer}>
-        <View style={styles.inputContainer}>
-          <Icon name="search" size={20} color={Colors.primary} />
-          <TextInput
-            style={styles.input}
-            placeholder="Search"
-            placeholderTextColor="#b0c1d1"
-          />
-        </View>
-      </View>
-      {/* Search End */}
 
       {/* Banner */}
       <ScrollView>
+        {/* Search */}
+        <View style={styles.searchcontainer}>
+          <View style={styles.inputContainer}>
+            <Icon name="search" size={20} color={Colors.primary} />
+            <TextInput
+              style={styles.input}
+              placeholder="Search"
+              placeholderTextColor="#b0c1d1"
+            />
+          </View>
+        </View>
+        {/* Search End */}
         <View style={styles.screen}>
           <ImageBackground
             flexDirection="row"
