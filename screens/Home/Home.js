@@ -9,6 +9,7 @@ import {
   TextInput,
   StatusBar,
   TouchableOpacity,
+  Button,
 } from "react-native";
 import React from "react";
 
@@ -102,10 +103,22 @@ export default function Home({ navigation }) {
           <Text style={styles.Bigtitle}>Hi,Jane</Text>
           <Text style={styles.Smalltitle}>Jan 10,2023</Text>
         </View>
-        <View>
+        <View flexDirection="row">
           <Image
             source={require("../../assets/images/Notification.png")}
             style={styles.bell}
+          />
+
+          <Icon
+            style={{
+              marginTop: Spacing,
+              padding: Spacing,
+              marginRight: Spacing * 2,
+            }}
+            name="bars"
+            size={20}
+            color="black"
+            onPress={() => navigation.openDrawer()}
           />
         </View>
       </View>

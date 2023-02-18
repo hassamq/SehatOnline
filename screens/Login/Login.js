@@ -58,7 +58,7 @@ const Login = ({ navigation }) => {
       // Perform the form submission here
       if (email === "hassamq59@gmail.com" && password === "12345678") {
         // console.log("Success!");
-        navigation.navigate("Home");
+        navigation.navigate("DrawerMenu");
       } else {
         console.log("Failed");
       }
