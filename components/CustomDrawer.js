@@ -13,14 +13,23 @@ import {
   StyleSheet,
 } from "react-native";
 
+import { useNavigation } from "@react-navigation/native"; // Import the useNavigation hook
+
 import MainHome from "../screens/Home/Home";
 import FontSize from "../Constants/FontSize";
 import Colors from "../Constants/colors";
 import Fonts from "../Constants/Fonts";
-import Ionicon from "react-native-ionicons";
+import Ionicon from "react-native-vector-icons/Ionicons";
 import { FontAwesome } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const CustomDrawer = (props) => {
+  const { navigation } = props;
+  const handleLogout = () => {
+    // Navigate to the screen named "Login"
+    props.navigation.navigate("Welcome");
+  };
+
   return (
     <>
       <View>
@@ -47,11 +56,33 @@ const CustomDrawer = (props) => {
       </View>
 
       <DrawerContentScrollView {...props}>
-        <DrawerItemList {...props} style={styles.drawerItemList} />
+        <View style={styles.drawerItemList}>
+          <DrawerItemList {...props} />
+        </View>
       </DrawerContentScrollView>
+
+      <View style={{ padding: 20, borderTopColor: "#ccc", borderTopWidth: 1 }}>
+        <TouchableOpacity
+          onPress={handleLogout}
+          style={{ paddingVertical: 15 }}
+        >
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Ionicon name="exit-outline" size={24} />
+            <Text style={styles.smalltitle}>Logout</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => {}} style={{ paddingVertical: 15 }}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Ionicon name="alert-circle-outline" size={24} />
+            <Text style={styles.smalltitle}>Privacy Policy</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
     </>
   );
 };
+
 const styles = StyleSheet.create({
   Bigtitle: {
     fontFamily: Fonts["poppins-semiBold"],
@@ -60,9 +91,16 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   drawerItemList: {
-    marginTop: 16,
-    borderTopWidth: 1,
-    borderTopColor: "gray",
+    flex: 1,
+    backgroundColor: "#fff",
+    paddingTop: 10,
+  },
+  smalltitle: {
+    fontFamily: Fonts["poppins-regular"],
+    fontSize: FontSize.small,
+    color: Colors.text,
+    marginLeft: 5,
   },
 });
+
 export default CustomDrawer;

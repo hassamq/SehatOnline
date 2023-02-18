@@ -5,8 +5,12 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesome } from "@expo/vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import Ionicon from "react-native-vector-icons/Ionicons";
 
+import Spacing from "../Constants/spacing";
+import FontSize from "../Constants/FontSize";
 import Colors from "../Constants/colors";
+import Fonts from "../Constants/Fonts";
 
 import WelcomeScreen from "../screens/WelcomeScreen/WelcomeScreen";
 import Login from "../screens/Login/Login";
@@ -67,22 +71,60 @@ export const DrawerMenu = ({ navigation, route }) => {
     <NavigationContainer independent={true} theme={theme}>
       <Drawer.Navigator
         drawerContent={(props) => <CustomDrawer {...props} />}
-        screenOptions={{ headerShown: false }}
+        screenOptions={{
+          headerShown: false,
+          drawerActiveBackgroundColor: Colors.primary,
+          drawerActiveTintColor: Colors.onPrimary,
+          drawerInactiveTintColor: "#333",
+          drawerLabelStyle: {
+            marginLeft: -25,
+            fontSize: FontSize.medium,
+            fontFamily: Fonts["poppins-regular"],
+          },
+        }}
       >
         <Drawer.Screen
           name="Home"
           component={BottomTabNavigation}
           label="Home"
+          options={{
+            drawerIcon: ({ color }) => (
+              <Ionicon name="home-outline" size={22} color={color} />
+            ),
+          }}
         />
 
-        <Drawer.Screen name="Profile" component={MainHome} label="Profile" />
+        <Drawer.Screen
+          name="Profile"
+          component={MainHome}
+          label="Profile"
+          options={{
+            drawerIcon: ({ color }) => (
+              <Ionicon name="person-outline" size={22} color={color} />
+            ),
+          }}
+        />
 
         <Drawer.Screen
           name="Appointment"
           component={MainHome}
           label="Appointment"
+          options={{
+            drawerIcon: ({ color }) => (
+              <Ionicon name="timer-outline" size={22} color={color} />
+            ),
+          }}
         />
-        <Drawer.Screen name="Settings" component={MainHome} label="Settings" />
+        <Drawer.Screen
+          name="Settings"
+          component={MainHome}
+          label="Settings"
+          options={{
+            drawerIcon: ({ color }) => (
+              <Ionicon name="settings-outline" size={22} color={color} />
+            ),
+          }}
+        />
       </Drawer.Navigator>
     </NavigationContainer>
   );
