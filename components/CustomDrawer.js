@@ -60,7 +60,10 @@ const CustomDrawer = (props) => {
         <View style={styles.drawerItemList}>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("DrawerMenu");
+              navigation.navigate("BottomTabNavigation",
+              
+              {screen:"Home1"}
+              );
             }}
             style={{ paddingVertical: 15 }}
           >

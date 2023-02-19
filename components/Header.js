@@ -37,7 +37,13 @@ export default function Settings(props) {
             size={20}
             color="white"
             onPress={() => {
+              if(props.pre===null)
+            {
               navigation.goBack();
+            }
+            else{
+              navigation.navigate(props.pre);
+            }
             }}
           />
 

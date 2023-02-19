@@ -19,12 +19,13 @@ import { useNavigation } from "@react-navigation/native";
 const Doctors = () => {
   const navigation = useNavigation();
   const title = "Doctors";
+  const previosScreen=null;
   return (
     <View>
-      <Header data={title} />
+      <Header data={title} pre={previosScreen} />
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("MainHome");
+          navigation.navigate("DoctorsDetail");
         }}
       >
         <Text>Doctors</Text>

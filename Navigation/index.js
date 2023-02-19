@@ -19,6 +19,7 @@ import MainHome from "../screens/Home/Home";
 import Settings from "../screens/Settings/Settings";
 import Appointment from "../screens/Appointment/Appointment";
 import Doctors from "../screens/Doctors/Doctors";
+import DoctorsDetail from "../screens/Doctors/DoctorsDetail";
 
 import CustomDrawer from "../components/CustomDrawer";
 
@@ -49,7 +50,7 @@ function StackNavigator() {
           component={DrawerMenu}
           options={{ gestureEnabled: false }}
         />
-        <Stack.Screen name="Doctors" component={Doctorstack} />
+        {/* <Stack.Screen name="Doctors" component={Doctorstack} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -127,7 +128,8 @@ export const DrawerMenu = ({ navigation, route }) => {
         }}
       />
 
-      <Drawer.Screen name="Doctors" component={Doctorstack} />
+      <Drawer.Screen name="Doctors" component={Doctors} />
+      <Drawer.Screen name="DoctorsDetail" component={DoctorsDetail}/>
     </Drawer.Navigator>
   );
 };
