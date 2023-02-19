@@ -61,9 +61,11 @@ const styles = {
     padding: 16,
   },
   image: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: Colors.primary,
   },
   details: {
     flex: 1,
@@ -71,21 +73,24 @@ const styles = {
     justifyContent: "center",
   },
   name: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: FontSize.large,
+    fontWeight: Fonts["poppins-Bold"],
     marginBottom: 8,
   },
   education: {
-    fontSize: 16,
+    fontSize: FontSize.medium,
+    fontWeight: Fonts["poppins-Bold"],
     color: "#777",
     marginBottom: 4,
   },
   specialization: {
-    fontSize: 16,
+    fontSize: FontSize.small,
+    fontWeight: Fonts["poppins-Bold"],
     color: "#777",
     marginBottom: 4,
   },
   experience: {
+    fontWeight: Fonts["poppins-regular"],
     fontSize: 16,
     color: "#777",
   },
