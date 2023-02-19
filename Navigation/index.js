@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesome } from "@expo/vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import Ionicon from "react-native-vector-icons/Ionicons";
+import ProfileScreen from "../screens/Profile/ProfileScreen";
 
 import Spacing from "../Constants/spacing";
 import FontSize from "../Constants/FontSize";
@@ -97,17 +98,6 @@ export const DrawerMenu = ({ navigation, route }) => {
       />
 
       <Drawer.Screen
-        name="Profile"
-        component={BottomTabNavigation}
-        options={{
-          title: "Profile",
-          drawerIcon: ({ color }) => (
-            <Ionicon name="person-outline" size={22} color={color} />
-          ),
-        }}
-      />
-
-      <Drawer.Screen
         name="Appointment"
         component={Appointment}
         options={{
@@ -129,7 +119,7 @@ export const DrawerMenu = ({ navigation, route }) => {
       />
 
       <Drawer.Screen name="Doctors" component={Doctors} />
-      <Drawer.Screen name="DoctorsDetail" component={DoctorsDetail}/>
+      <Drawer.Screen name="DoctorsDetail" component={DoctorsDetail} />
     </Drawer.Navigator>
   );
 };
@@ -150,7 +140,7 @@ export const BottomTabNavigation = ({ navigation, route }) => {
 
           if (route.name === "Home1") {
             iconName = "home";
-          } else if (route.name === "Profile1") {
+          } else if (route.name === "Profile") {
             iconName = "user";
           } else if (route.name === "1") {
             iconImage = require("../assets/images/icon.png");
@@ -223,8 +213,8 @@ export const BottomTabNavigation = ({ navigation, route }) => {
         options={{ tabBarLabel: "Home" }}
       />
       <Tab.Screen
-        name="Profile1"
-        component={MainHome}
+        name="Profile"
+        component={ProfileScreen}
         options={{ tabBarLabel: "Profile" }}
       />
       <Tab.Screen
