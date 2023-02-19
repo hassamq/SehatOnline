@@ -15,5 +15,6 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import Header from "../../components/Header";
 export default function Settings(navigation) {
   const title = "Settings";
-  return <Header data={title} />;
+  const previosScreen=null;
+  return <Header data={title} pre={previosScreen} />
 }
