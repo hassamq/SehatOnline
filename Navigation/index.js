@@ -16,6 +16,9 @@ import WelcomeScreen from "../screens/WelcomeScreen/WelcomeScreen";
 import Login from "../screens/Login/Login";
 import Register from "../screens/Register/Register";
 import MainHome from "../screens/Home/Home";
+import Settings from "../screens/Settings/Settings";
+import Appointment from "../screens/Appointment/Appointment";
+import Doctors from "../screens/Doctors/Doctors";
 
 import CustomDrawer from "../components/CustomDrawer";
 
@@ -35,7 +38,7 @@ function StackNavigator() {
   return (
     <NavigationContainer independent={true} theme={theme}>
       <Stack.Navigator
-        initialRouteName="Welcome"
+        initialRouteName="DrawerMenu"
         screenOptions={{ headerShown: false, gestureEnabled: false }}
       >
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
@@ -46,21 +49,20 @@ function StackNavigator() {
           component={DrawerMenu}
           options={{ gestureEnabled: false }}
         />
+        <Stack.Screen name="Doctors" component={Doctorstack} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-function homestack() {
+function Doctorstack() {
   return (
     <NavigationContainer independent={true} theme={theme}>
       <Stack.Navigator
-        initialRouteName="Welcome"
+        initialRouteName="Doctors"
         screenOptions={{ headerShown: false, gestureEnabled: true }}
       >
-        <Stack.Screen name="Welcome" component={WelcomeScreen} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="DrawerMenu" component={DrawerMenu} />
+        <Stack.Screen name="MainHome" component={DrawerMenu} />
+        <Stack.Screen name="Doctors" component={Doctors} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -68,65 +70,65 @@ function homestack() {
 
 export const DrawerMenu = ({ navigation, route }) => {
   return (
-    <NavigationContainer independent={true} theme={theme}>
-      <Drawer.Navigator
-        drawerContent={(props) => <CustomDrawer {...props} />}
-        screenOptions={{
-          headerShown: false,
-          drawerActiveBackgroundColor: Colors.primary,
-          drawerActiveTintColor: Colors.onPrimary,
-          drawerInactiveTintColor: "#333",
-          drawerLabelStyle: {
-            marginLeft: -25,
-            fontSize: FontSize.medium,
-            fontFamily: Fonts["poppins-regular"],
-          },
+    <Drawer.Navigator
+      drawerContent={(props) => <CustomDrawer {...props} />}
+      screenOptions={{
+        headerShown: false,
+        drawerActiveBackgroundColor: Colors.primary,
+        drawerActiveTintColor: Colors.onPrimary,
+        drawerInactiveTintColor: "#333",
+        drawerLabelStyle: {
+          marginLeft: -25,
+          fontSize: FontSize.medium,
+          fontFamily: Fonts["poppins-regular"],
+        },
+      }}
+    >
+      <Drawer.Screen
+        name="BottomTabNavigation"
+        component={BottomTabNavigation}
+        options={{
+          title: "Home",
+          drawerIcon: ({ color }) => (
+            <Ionicon name="home-outline" size={22} color={color} />
+          ),
         }}
-      >
-        <Drawer.Screen
-          name="Home"
-          component={BottomTabNavigation}
-          label="Home"
-          options={{
-            drawerIcon: ({ color }) => (
-              <Ionicon name="home-outline" size={22} color={color} />
-            ),
-          }}
-        />
+      />
 
-        <Drawer.Screen
-          name="Profile"
-          component={MainHome}
-          label="Profile"
-          options={{
-            drawerIcon: ({ color }) => (
-              <Ionicon name="person-outline" size={22} color={color} />
-            ),
-          }}
-        />
+      <Drawer.Screen
+        name="Profile"
+        component={BottomTabNavigation}
+        options={{
+          title: "Profile",
+          drawerIcon: ({ color }) => (
+            <Ionicon name="person-outline" size={22} color={color} />
+          ),
+        }}
+      />
 
-        <Drawer.Screen
-          name="Appointment"
-          component={MainHome}
-          label="Appointment"
-          options={{
-            drawerIcon: ({ color }) => (
-              <Ionicon name="timer-outline" size={22} color={color} />
-            ),
-          }}
-        />
-        <Drawer.Screen
-          name="Settings"
-          component={MainHome}
-          label="Settings"
-          options={{
-            drawerIcon: ({ color }) => (
-              <Ionicon name="settings-outline" size={22} color={color} />
-            ),
-          }}
-        />
-      </Drawer.Navigator>
-    </NavigationContainer>
+      <Drawer.Screen
+        name="Appointment"
+        component={Appointment}
+        options={{
+          title: "Appointment",
+          drawerIcon: ({ color }) => (
+            <Ionicon name="timer-outline" size={22} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Settings"
+        component={Settings}
+        options={{
+          title: "Settings",
+          drawerIcon: ({ color }) => (
+            <Ionicon name="settings-outline" size={22} color={color} />
+          ),
+        }}
+      />
+
+      <Drawer.Screen name="Doctors" component={Doctorstack} />
+    </Drawer.Navigator>
   );
 };
 
@@ -136,7 +138,7 @@ export const BottomTabNavigation = ({ navigation, route }) => {
 
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Home1"
       screenOptions={({ route }) => ({
         headerShown: false, // remove header for all screens
 
@@ -144,15 +146,15 @@ export const BottomTabNavigation = ({ navigation, route }) => {
           let iconImage;
           let iconName;
 
-          if (route.name === "Home") {
+          if (route.name === "Home1") {
             iconName = "home";
-          } else if (route.name === "Profile") {
+          } else if (route.name === "Profile1") {
             iconName = "user";
           } else if (route.name === "1") {
             iconImage = require("../assets/images/icon.png");
-          } else if (route.name === "Appointment") {
+          } else if (route.name === "Appointment1") {
             iconName = "book";
-          } else if (route.name === "Settings") {
+          } else if (route.name === "Settings1") {
             iconName = "gear";
           }
 
@@ -214,12 +216,12 @@ export const BottomTabNavigation = ({ navigation, route }) => {
       })}
     >
       <Tab.Screen
-        name="Home"
+        name="Home1"
         component={MainHome}
         options={{ tabBarLabel: "Home" }}
       />
       <Tab.Screen
-        name="Profile"
+        name="Profile1"
         component={MainHome}
         options={{ tabBarLabel: "Profile" }}
       />
@@ -229,13 +231,13 @@ export const BottomTabNavigation = ({ navigation, route }) => {
         options={{ tabBarLabel: "1" }}
       />
       <Tab.Screen
-        name="Appointment"
-        component={MainHome}
+        name="Appointment1"
+        component={Appointment}
         options={{ tabBarLabel: "Appointment" }}
       />
       <Tab.Screen
-        name="Settings"
-        component={MainHome}
+        name="Settings1"
+        component={Settings}
         options={{ tabBarLabel: "" }}
       />
     </Tab.Navigator>

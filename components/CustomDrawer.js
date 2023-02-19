@@ -24,10 +24,11 @@ import { FontAwesome } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 const CustomDrawer = (props) => {
-  const { navigation } = props;
+  const navigation = useNavigation();
+
   const handleLogout = () => {
     // Navigate to the screen named "Login"
-    props.navigation.navigate("Welcome");
+    navigation.navigate("Welcome");
   };
 
   return (
@@ -57,7 +58,55 @@ const CustomDrawer = (props) => {
 
       <DrawerContentScrollView {...props}>
         <View style={styles.drawerItemList}>
-          <DrawerItemList {...props} />
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("DrawerMenu");
+            }}
+            style={{ paddingVertical: 15 }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Ionicon name="home-outline" size={24} />
+              <Text style={styles.smalltitle}>Home</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Appointment");
+            }}
+            style={{ paddingVertical: 15 }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Ionicon name="timer-outline" size={24} />
+              <Text style={styles.smalltitle}>Appointment</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Doctors");
+            }}
+            style={{ paddingVertical: 15 }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Ionicon name="search-outline" size={24} />
+              <Text style={styles.smalltitle}>Doctors</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Settings");
+            }}
+            style={{ paddingVertical: 15 }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Ionicon name="settings-outline" size={24} />
+              <Text style={styles.smalltitle}>Settings</Text>
+            </View>
+          </TouchableOpacity>
+
+          {/* <DrawerItemList {...props} /> */}
         </View>
       </DrawerContentScrollView>
 
@@ -94,6 +143,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     paddingTop: 10,
+    paddingHorizontal: "5%",
   },
   smalltitle: {
     fontFamily: Fonts["poppins-regular"],

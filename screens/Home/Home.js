@@ -237,8 +237,29 @@ export default function Home({ navigation }) {
             >
               Doctors
             </Text>
-            <TouchableOpacity>
-              <Text style={styles.viewAll}>View All</Text>
+
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Doctors");
+              }}
+              style={{
+                padding: 8.5,
+                backgroundColor: Colors.primary,
+                marginVertical: Spacing / 2,
+
+                shadowColor: Colors.text,
+                shadowOffset: {
+                  width: 0,
+                  height: Spacing,
+                },
+                shadowOpacity: 0.3,
+                borderBottomLeftRadius: 15,
+                borderTopRightRadius: 15,
+                borderRadius: 5,
+                height: 33,
+              }}
+            >
+              <Text style={styles.signinbtn}>View All</Text>
             </TouchableOpacity>
           </View>
 
@@ -362,9 +383,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#2596be",
   },
-  viewAll: {
-    fontSize: 16,
-    color: "#2596be",
+  // viewAll: {
+  //   fontSize: 16,
+  //   color: "#2596be",
+  // },
+  signinbtn: {
+    fontFamily: Fonts["poppins-regular"],
+    color: Colors.onPrimary,
+    textAlign: "center",
+    fontSize: 12,
   },
   DoctorcardContainer: {
     flexDirection: "row",
