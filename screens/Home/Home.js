@@ -61,32 +61,53 @@ export default function Home({ navigation }) {
       title: "Online Consultation",
       description: "Get consultation from doctors online",
       iconName: "user-md",
+      onPress: () => {
+        console.log("Online Consultation card pressed");
+        // Add your custom logic here
+      },
     },
     {
       id: "2",
       title: "Home Sampling for Tests",
       description: "Get your samples collected from home",
       iconName: "home",
+      onPress: () => {
+        console.log("Home Sampling for Tests card pressed");
+        // Add your custom logic here
+      },
     },
     {
       id: "3",
       title: "Book Lab Tests",
       description: "Book lab tests at your convenience",
       iconName: "calendar",
+      onPress: () => {
+        console.log("Book Lab Tests card pressed");
+        // Add your custom logic here
+      },
     },
     {
       id: "4",
       title: "Medicine Delivery",
       description: "Get your medicines delivered to your doorstep",
       iconName: "medkit",
+      onPress: () => {
+        console.log("Medicine Delivery card pressed");
+        // Add your custom logic here
+      },
     },
     {
       id: "5",
       title: "Symptoms Checker",
       description: "Check your symptoms and get recommendations",
       iconName: "stethoscope",
+      onPress: () => {
+        console.log("Symptoms Checker card pressed");
+        navigation.navigate("SymptomsChecker")
+      },
     },
   ];
+  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -211,12 +232,15 @@ export default function Home({ navigation }) {
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <View style={styles.cardContainer}>
-                <Card
-                  title={item.title}
-                  description={item.description}
-                  iconName={item.iconName}
-                />
-              </View>
+        
+          <Card
+            title={item.title}
+            description={item.description}
+            iconName={item.iconName}
+            onPress={item.onPress} // Pass onPress to the Card component
+          />
+       
+      </View>
             )}
             horizontal
             showsHorizontalScrollIndicator={false}

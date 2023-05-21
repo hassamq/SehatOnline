@@ -21,6 +21,7 @@ import Settings from "../screens/Settings/Settings";
 import Appointment from "../screens/Appointment/Appointment";
 import Doctors from "../screens/Doctors/Doctors";
 import DoctorsDetail from "../screens/Doctors/DoctorsDetail";
+import SymptomsChecker from "../screens/SymptomsChecker/SymptomsChecker";
 
 import CustomDrawer from "../components/CustomDrawer";
 
@@ -120,6 +121,7 @@ export const DrawerMenu = ({ navigation, route }) => {
 
       <Drawer.Screen name="Doctors" component={Doctors} />
       <Drawer.Screen name="DoctorsDetail" component={DoctorsDetail} />
+      <Drawer.Screen name="SymptomsChecker" component={SymptomsChecker}/>
     </Drawer.Navigator>
   );
 };
