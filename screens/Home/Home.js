@@ -73,7 +73,7 @@ export default function Home({ navigation }) {
       iconName: "home",
       onPress: () => {
         console.log("Home Sampling for Tests card pressed");
-        // Add your custom logic here
+        navigation.navigate("HomeSampling")
       },
     },
     {
@@ -93,7 +93,7 @@ export default function Home({ navigation }) {
       iconName: "medkit",
       onPress: () => {
         console.log("Medicine Delivery card pressed");
-        // Add your custom logic here
+        navigation.navigate("Medicine")
       },
     },
     {
