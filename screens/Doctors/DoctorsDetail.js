@@ -57,9 +57,9 @@ const DoctorsDetail = ({ route, navigation }) => {
                 <Text style={styles.bioText}>{doctor.bio}</Text>
               </View>
 
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity style={styles.button} >
                 <Ionicons name="calendar-outline" size={25} color="#fff" />
-                <Text style={styles.buttonText}>Book an Appointment</Text>
+                <Text style={styles.buttonText} >Book an Appointment</Text>
               </TouchableOpacity>
             </View>
           </View>

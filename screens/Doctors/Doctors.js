@@ -91,6 +91,7 @@ const Doctors = () => {
 
   const onBookAppointment = () => {
     // handle Book an Appointment button press
+    navigation.navigate("AppointmentScreen")
   };
 
   return (

@@ -21,6 +21,8 @@ import Settings from "../screens/Settings/Settings";
 import Appointment from "../screens/Appointment/Appointment";
 import Doctors from "../screens/Doctors/Doctors";
 import DoctorsDetail from "../screens/Doctors/DoctorsDetail";
+import AppointmentScreen from "../screens/Doctors/AppointmentScreen";
+import Payment from "../screens/Doctors/Payment"
 import SymptomsChecker from "../screens/SymptomsChecker/SymptomsChecker";
 import Medicine from "../screens/Medicine Delivery/Medicine";
 import HomeSamplingTests from "../screens/HomeSampling/HomeSampling";
@@ -123,6 +125,9 @@ export const DrawerMenu = ({ navigation, route }) => {
 
       <Drawer.Screen name="Doctors" component={Doctors} />
       <Drawer.Screen name="DoctorsDetail" component={DoctorsDetail} />
+      <Drawer.Screen name="AppointmentScreen" component={AppointmentScreen}/>
+      <Drawer.Screen name="Payment" component={Payment}/>
+
       <Drawer.Screen name="SymptomsChecker" component={SymptomsChecker}/>
       <Drawer.Screen name="Medicine" component={Medicine}/>
       <Drawer.Screen name="HomeSampling" component={HomeSamplingTests}/>
