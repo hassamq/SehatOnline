@@ -17,6 +17,7 @@ const AppointmentScreen = ({ navigation }) => {
 
   // Fetch available time slots from the server
   useEffect(() => {
+    setSelectedSlot(null);
     fetchTimeSlots(); // Implement your own function to fetch time slots
   }, []);
 

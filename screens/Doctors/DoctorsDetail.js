@@ -21,6 +21,10 @@ const DoctorsDetail = ({ route, navigation }) => {
   const title = "Doctor Detail";
   const previosScreen = "Doctors";
   const { doctor } = route.params;
+
+  const HandleAppointment=()=>{
+navigation.navigate("AppointmentScreen")
+  };
   return (
     <View>
       <Header data={title} pre={previosScreen} />
@@ -57,7 +61,7 @@ const DoctorsDetail = ({ route, navigation }) => {
                 <Text style={styles.bioText}>{doctor.bio}</Text>
               </View>
 
-              <TouchableOpacity style={styles.button} >
+              <TouchableOpacity style={styles.button} onPress={HandleAppointment} >
                 <Ionicons name="calendar-outline" size={25} color="#fff" />
                 <Text style={styles.buttonText} >Book an Appointment</Text>
               </TouchableOpacity>

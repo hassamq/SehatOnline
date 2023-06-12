@@ -20,29 +20,58 @@ export default function Appointments({ navigation }) {
   const title = "Payment";
   const previosScreen = "AppointmentScreen";
   const [loading, setLoading] = useState(false);
+  const [appointmentBooked, setAppointmentBooked] = useState(false);
 
   const handlePayLater = () => {
-    // Implement the logic for "Pay Later" button
     setLoading(true);
 
     // Simulating a delay for demonstration purposes
     setTimeout(() => {
       setLoading(false);
-      console.log("Pay Later");
+      setAppointmentBooked(true);
     }, 2000);
   };
+
+  const handleContinue = () => {
+    // Implement logic to navigate to the next screen or reset the app state
+    setAppointmentBooked(false);
+    navigation.navigate("Doctors")
+  };
+
+  if (appointmentBooked) {
+    return (
+      <>
+       
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Icon name="check-circle" size={100} color={"green"} style={{alignSelf:"center",marginTop:30}} />
+            <Text style={styles.title}>Appointment Booked!</Text>
+          </View>
+          <Text style={styles.subTitle}>
+            Your appointment has been successfully booked.
+          </Text>
+          <TouchableOpacity
+            style={styles.continueButton}
+            onPress={handleContinue}
+          >
+            <Text style={styles.continueButtonText}>Continue</Text>
+          </TouchableOpacity>
+        </View>
+      </>
+    );
+  }
 
   return (
     <>
       <Header data={title} pre={previosScreen} />
       <View style={styles.container}>
         {/* Your payment screen content */}
-        {loading ? (
-            <ActivityIndicator size="large" color={Colors.primary} />
-          ) : (
-       
+        
 
-       
+        {/* "Pay Later" button */}
+        {loading ? (
+            <ActivityIndicator size="large" color={"black"} />
+          ) : (
         <TouchableOpacity
           style={styles.payLaterButton}
           onPress={handlePayLater}
@@ -50,12 +79,17 @@ export default function Appointments({ navigation }) {
         >
           
             <>
-              <Icon name="credit-card" size={35} style={{ marginLeft: 30 }} color={"black"} />
+              <Icon
+                name="credit-card"
+                size={35}
+                style={{ marginLeft: 30 }}
+                color={"black"}
+              />
               <Text style={styles.payLaterText}>Pay on Visit</Text>
             </>
-          
+         
         </TouchableOpacity>
-        )}
+         )}
       </View>
     </>
   );
@@ -65,11 +99,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    marginTop:"30%"
   },
   title: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: FontSize.large,
+    fontFamily:Fonts["poppins-bold"],
+   alignSelf:"center",
     marginBottom: 16,
+  },
+  subTitle: {
+    fontSize: FontSize.medium,
+    fontFamily:Fonts["poppins-semibold"],
+    marginBottom: 24,
+    alignSelf:"center"
   },
   payLaterButton: {
     flexDirection: "row",
@@ -85,5 +127,17 @@ const styles = StyleSheet.create({
     fontSize: 21,
     marginLeft: 50,
     fontFamily: Fonts["poppins-bold"],
+  },
+  continueButton: {
+    backgroundColor: Colors.primary,
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    marginTop: 24,
+  },
+  continueButtonText: {
+    color: "white",
+    fontSize: 18,
+    textAlign: "center",
   },
 });
