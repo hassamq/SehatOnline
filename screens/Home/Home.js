@@ -84,6 +84,7 @@ export default function Home({ navigation }) {
       iconName: "calendar",
       onPress: () => {
         console.log("Book Lab Tests card pressed");
+        navigation.navigate("LabTest")
         // Add your custom logic here
       },
     },

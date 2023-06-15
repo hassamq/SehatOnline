@@ -28,6 +28,8 @@ import Medicine from "../screens/Medicine Delivery/Medicine";
 import MedicinePayment from "../screens/Medicine Delivery/MedicinePayment" ;
 import HomeSamplingTests from "../screens/HomeSampling/HomeSampling";
 import HomeSamplingPaymentScreen from "../screens/HomeSampling/HomeSamplingPaymentScreen";
+import LabTest from "../screens/Lab Tests/LabTest";
+import LabTestPayment from "../screens/Lab Tests/LabTestPayment"
 
 import CustomDrawer from "../components/CustomDrawer";
 
@@ -137,6 +139,9 @@ export const DrawerMenu = ({ navigation, route }) => {
 
       <Drawer.Screen name="HomeSampling" component={HomeSamplingTests}/>
       <Drawer.Screen name="HomeSamplingPayment" component={HomeSamplingPaymentScreen}/>
+
+      <Drawer.Screen name="LabTest" component={LabTest}/>
+      <Drawer.Screen name="LabTestPayment" component={LabTestPayment}/>
     </Drawer.Navigator>
   );
 };

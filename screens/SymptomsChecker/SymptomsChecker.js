@@ -1,103 +1,119 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-import Header from "../../components/Header";
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import Checkbox from "../../components/Checkbox";
+import Colors from "../../Constants/colors";
+import Spacing from "../../Constants/spacing";
+import FontSize from "../../Constants/FontSize";
+import Fonts from "../../Constants/Fonts";
 
 const SymptomsChecker = () => {
-  const title = "Symptoms Checker";
-  const previousScreen = null;
-  const [symptoms, setSymptoms] = useState('');
-  const [result, setResult] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [symptoms, setSymptoms] = useState({
+    fever: false,
+    cough: false,
+    headache: false,
+    fatigue: false,
+    // Add more symptoms here...
+  });
 
-  const checkSymptoms = async () => {
-    try {
-      setIsLoading(true);
-      const response = await fetch(
-        `https://apps.nlm.nih.gov/medlineplus/services/mpconnect_service.cfm?mainSearchCriteria=${symptoms}&knowledgeResponseType=text`,
-        {
-          method: "GET",
-        }
-      );
+  const handleCheckboxPress = (key) => {
+    setSymptoms((prevSymptoms) => ({
+      ...prevSymptoms,
+      [key]: !prevSymptoms[key],
+    }));
+  };
 
-      const data = await response.text();
-      console.log("Response:", data); // Log the response data
+  const handleCheckSymptoms = () => {
+    // Prepare the symptoms data to send to the AI backend
+    const selectedSymptoms = Object.keys(symptoms).filter(
+      (key) => symptoms[key]
+    );
 
-      // Parse and extract the relevant information from the response
+    // Send the symptoms data to the backend for AI processing
+    // You can make an API request to your backend service here
 
-      // Example logic:
-      if (data.includes("flu") || data.includes("influenza")) {
-        setResult('Possible flu');
-      } else if (data.includes("respiratory")) {
-        setResult('Possible respiratory issue');
-      } else {
-        setResult('No specific condition detected');
-      }
-
-      setIsLoading(false);
-    } catch (error) {
-      console.error(error);
-      setIsLoading(false);
-    }
+    // Example API request using fetch:
+    fetch("https://your-backend-api/check-symptoms", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ symptoms: selectedSymptoms }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Process the AI response
+        // Display the diagnosis or suggestion to the user
+        Alert.alert("AI Diagnosis", data.diagnosis);
+      })
+      .catch((error) => {
+        console.error("Error checking symptoms:", error);
+        // Handle the error gracefully
+        Alert.alert("Error", "An error occurred while checking symptoms.");
+      });
   };
 
   return (
-    <View>
-      <Header data={title} pre={previousScreen} />
-      <View style={styles.container}>
-        <Text style={styles.label}>Enter your symptoms:</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={text => setSymptoms(text)}
-          value={symptoms}
-          placeholder="e.g., fever, cough"
-        />
-        <TouchableOpacity
-          style={styles.button}
-          onPress={checkSymptoms}
-          disabled={isLoading}
-        >
-          <Text style={styles.buttonText}>{isLoading ? 'Checking Symptoms...' : 'Check Symptoms'}</Text>
-        </TouchableOpacity>
-        {result ? <Text style={styles.result}>Result: {result}</Text> : null}
-      </View>
+    <View style={styles.container}>
+      <Text style={styles.title}>Symptoms Checker</Text>
+      <Text style={styles.subtitle}>Select the symptoms you're experiencing:</Text>
+
+      <Checkbox
+        label="Fever"
+        checked={symptoms.fever}
+        onPress={() => handleCheckboxPress("fever")}
+      />
+      <Checkbox
+        label="Cough"
+        checked={symptoms.cough}
+        onPress={() => handleCheckboxPress("cough")}
+      />
+      <Checkbox
+        label="Headache"
+        checked={symptoms.headache}
+        onPress={() => handleCheckboxPress("headache")}
+      />
+      <Checkbox
+        label="Fatigue"
+        checked={symptoms.fatigue}
+        onPress={() => handleCheckboxPress("fatigue")}
+      />
+      {/* Add more checkboxes for other symptoms */}
+
+      <TouchableOpacity style={styles.checkButton} onPress={handleCheckSymptoms}>
+        <Text style={styles.checkButtonText}>Check Symptoms</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
-export default SymptomsChecker;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingVertical: 20,
+    padding: 16,
   },
-  label: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 10,
+  title: {
+    fontSize: FontSize.large,
+    fontFamily: Fonts["poppins-bold"],
+    marginBottom: Spacing.medium,
   },
-  input: {
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
+  subtitle: {
+    fontSize: FontSize.medium,
+    fontFamily: Fonts["poppins-regular"],
+    marginBottom: Spacing.medium,
   },
-  button: {
-    backgroundColor: "blue",
-    padding: 20,
-    borderRadius: 10,
-    alignItems: "center",
+  checkButton: {
+    backgroundColor: Colors.primary,
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    marginTop: Spacing.medium,
   },
-  buttonText: {
+  checkButtonText: {
     color: "white",
-    fontWeight: "bold",
-  },
-  result: {
-    marginTop: 20,
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: FontSize.medium,
+    fontFamily: Fonts["poppins-bold"],
+    textAlign: "center",
   },
 });
+
+export default SymptomsChecker;
