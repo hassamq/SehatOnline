@@ -26,6 +26,7 @@ import Payment from "../screens/Doctors/Payment"
 import SymptomsChecker from "../screens/SymptomsChecker/SymptomsChecker";
 import Medicine from "../screens/Medicine Delivery/Medicine";
 import HomeSamplingTests from "../screens/HomeSampling/HomeSampling";
+import HomeSamplingPaymentScreen from "../screens/HomeSampling/HomeSamplingPaymentScreen";
 
 import CustomDrawer from "../components/CustomDrawer";
 
@@ -131,6 +132,7 @@ export const DrawerMenu = ({ navigation, route }) => {
       <Drawer.Screen name="SymptomsChecker" component={SymptomsChecker}/>
       <Drawer.Screen name="Medicine" component={Medicine}/>
       <Drawer.Screen name="HomeSampling" component={HomeSamplingTests}/>
+      <Drawer.Screen name="HomeSamplingPayment" component={HomeSamplingPaymentScreen}/>
     </Drawer.Navigator>
   );
 };
