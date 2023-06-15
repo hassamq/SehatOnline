@@ -25,6 +25,7 @@ import AppointmentScreen from "../screens/Doctors/AppointmentScreen";
 import Payment from "../screens/Doctors/Payment"
 import SymptomsChecker from "../screens/SymptomsChecker/SymptomsChecker";
 import Medicine from "../screens/Medicine Delivery/Medicine";
+import MedicinePayment from "../screens/Medicine Delivery/MedicinePayment" ;
 import HomeSamplingTests from "../screens/HomeSampling/HomeSampling";
 import HomeSamplingPaymentScreen from "../screens/HomeSampling/HomeSamplingPaymentScreen";
 
@@ -130,7 +131,10 @@ export const DrawerMenu = ({ navigation, route }) => {
       <Drawer.Screen name="Payment" component={Payment}/>
 
       <Drawer.Screen name="SymptomsChecker" component={SymptomsChecker}/>
+
       <Drawer.Screen name="Medicine" component={Medicine}/>
+      <Drawer.Screen name="MedicinePayment" component={MedicinePayment}/>
+
       <Drawer.Screen name="HomeSampling" component={HomeSamplingTests}/>
       <Drawer.Screen name="HomeSamplingPayment" component={HomeSamplingPaymentScreen}/>
     </Drawer.Navigator>

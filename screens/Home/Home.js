@@ -63,6 +63,7 @@ export default function Home({ navigation }) {
       iconName: "user-md",
       onPress: () => {
         console.log("Online Consultation card pressed");
+        navigation.navigate("Doctors")
         // Add your custom logic here
       },
     },
