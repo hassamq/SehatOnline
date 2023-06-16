@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -9,7 +9,9 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   ScrollView,
+  Image,
 } from "react-native";
+import * as ImagePicker from 'expo-image-picker';
 import Spacing from "../../Constants/spacing";
 import FontSize from "../../Constants/FontSize";
 import Colors from "../../Constants/colors";
@@ -17,17 +19,21 @@ import Fonts from "../../Constants/Fonts";
 import AppTextInput from "../../components/AppTextInput";
 import Icon from "react-native-vector-icons/FontAwesome";
 
+import api from "../../api/api"
+
 const Register = ({ navigation }) => {
   const handlePress = () => {
     Keyboard.dismiss();
   };
 
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [confirmPassword, setConfirmPassword] = React.useState("");
-  const [emailError, setEmailError] = React.useState("");
-  const [passwordError, setPasswordError] = React.useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = React.useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const validateEmail = (email) => {
     // A basic email validation function
@@ -62,9 +68,28 @@ const Register = ({ navigation }) => {
     }
   };
 
+  const handleImageUpload = async () => {
+    try {
+      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (permissionResult.granted === false) {
+        alert("Permission to access camera roll is required!");
+        return;
+      }
+
+      const pickerResult = await ImagePicker.launchImageLibraryAsync();
+      if (pickerResult.canceled) {
+        return;
+      }
+
+      setSelectedImage(pickerResult);
+    } catch (error) {
+      console.log("Error selecting image:", error);
+    }
+  };
+
   const Submit_btn = () => {
-    if (email === "" || password === "" || confirmPassword === "") {
-      alert("Enter all info");
+    if (email === "" || password === "" || confirmPassword === "" || username === "") {
+      alert("Enter all information");
     } else if (!emailError && !passwordError && !confirmPasswordError) {
       console.log("Success!");
       // Perform the form submission here
@@ -85,6 +110,8 @@ const Register = ({ navigation }) => {
             </View>
 
             <View style={{ marginVertical: Spacing * 3 }}>
+              <AppTextInput placeholder="Username" onChangeText={(text) => setUsername(text)} />
+
               <AppTextInput
                 placeholder="Email"
                 onChangeText={(text) => {
@@ -112,6 +139,14 @@ const Register = ({ navigation }) => {
                 secureTextEntry
               />
               <Text style={styles.errorText}>{confirmPasswordError}</Text>
+
+              <TouchableOpacity style={styles.uploadButton} onPress={handleImageUpload}>
+                <Text style={styles.uploadButtonText}>Upload Profile Image</Text>
+              </TouchableOpacity>
+
+              {selectedImage && (
+  <Image source={{ uri: selectedImage.assets[0].uri }} style={styles.uploadedImage} />
+)}
             </View>
 
             {/* Sign up */}
@@ -132,9 +167,7 @@ const Register = ({ navigation }) => {
             >
               <Text
                 style={styles.signinbtn}
-                disabled={
-                  !!emailError || !!passwordError || !!confirmPasswordError
-                }
+                disabled={!!emailError || !!passwordError || !!confirmPasswordError}
                 onPress={Submit_btn}
               >
                 Sign up
@@ -142,48 +175,11 @@ const Register = ({ navigation }) => {
             </TouchableOpacity>
 
             {/* Sign in */}
-
-            <TouchableOpacity
-              style={{
-                padding: Spacing * 0.2,
-              }}
-            >
-              <Text
-                style={styles.signupbtn}
-                onPress={() => navigation.navigate("Login")}
-              >
+            <TouchableOpacity style={{ padding: Spacing * 0.2 }}>
+              <Text style={styles.signupbtn} onPress={() => navigation.navigate("Login")}>
                 Already have an account
               </Text>
             </TouchableOpacity>
-
-            {/* Other accounts */}
-            <View>
-              <Text style={styles.otherbtn}>Or continue with</Text>
-
-              <View
-                style={{
-                  marginTop: Spacing,
-                  flexDirection: "row",
-                  justifyContent: "center",
-                }}
-              >
-                <TouchableOpacity style={styles.social_icons}>
-                  <Icon name="google" size={Spacing * 2} color={Colors.text} />
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.social_icons}>
-                  <Icon name="apple" size={Spacing * 2} color={Colors.text} />
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.social_icons}>
-                  <Icon
-                    name="facebook"
-                    size={Spacing * 2}
-                    color={Colors.text}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -192,6 +188,7 @@ const Register = ({ navigation }) => {
 };
 
 export default Register;
+
 const styles = StyleSheet.create({
   view1: {
     padding: Spacing,
@@ -215,13 +212,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 
-  forgotpswd: {
-    fontFamily: Fonts["poppins-semiBold"],
-    fontSize: FontSize.small,
-    color: Colors.primary,
-    alignSelf: "flex-end",
-  },
-
   signinbtn: {
     fontFamily: Fonts["poppins-bold"],
     color: Colors.onPrimary,
@@ -236,20 +226,28 @@ const styles = StyleSheet.create({
     fontSize: FontSize.small,
   },
 
-  otherbtn: {
-    padding: Spacing * 3,
-    fontFamily: Fonts["poppins-semiBold"],
-    color: Colors.primary,
-    textAlign: "center",
-    fontSize: FontSize.small,
+  uploadButton: {
+    backgroundColor: Colors.primary,
+    padding: Spacing * 2,
+    borderRadius: Spacing,
+    marginTop: Spacing,
   },
 
-  social_icons: {
-    padding: Spacing,
-    backgroundColor: Colors.gray,
-    borderRadius: Spacing / 2,
-    marginHorizontal: Spacing,
+  uploadButtonText: {
+    fontFamily: Fonts["poppins-bold"],
+    color: Colors.onPrimary,
+    textAlign: "center",
+    fontSize: FontSize.medium,
   },
+
+  uploadedImage: {
+    width: 150,
+    height: 150,
+    borderRadius: Spacing,
+    marginTop: Spacing,
+    alignSelf: "center",
+  },
+
   errorText: {
     color: "red",
     fontFamily: Fonts["poppins-regular"],

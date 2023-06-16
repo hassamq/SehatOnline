@@ -49,7 +49,7 @@ function StackNavigator() {
   return (
     <NavigationContainer independent={true} theme={theme}>
       <Stack.Navigator
-        initialRouteName="DrawerMenu"
+        initialRouteName="Register"
         screenOptions={{ headerShown: false, gestureEnabled: false }}
       >
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
