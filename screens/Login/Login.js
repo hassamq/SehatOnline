@@ -17,6 +17,7 @@ import AppTextInput from "../../components/AppTextInput";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { ScrollView } from "react-native-gesture-handler";
 
+import api from "../../api/api";
 const Login = ({ navigation }) => {
   const handlePress = () => {
     Keyboard.dismiss();
@@ -51,16 +52,25 @@ const Login = ({ navigation }) => {
     }
   };
 
-  const Submit_btn = () => {
-    if (email === "" || password === "") {
-      alert("Enter all info");
+  const Submit_btn = async () => {
+    if (email === '' || password === '') {
+      Alert.alert('Enter all info');
     } else if (!emailError && !passwordError) {
-      // Perform the form submission here
-      if (email === "hassamq59@gmail.com" && password === "12345678") {
-        // console.log("Success!");
-        navigation.navigate("DrawerMenu");
-      } else {
-        console.log("Failed");
+      try {
+        const userData = { email, password };
+        const response = await api.loginUser(userData);
+  
+        // Check if login was successful
+        if (response.token) {
+          // Login successful, navigate to the desired screen
+          navigation.navigate('DrawerMenu');
+        } else {
+          // Login failed, show error message
+          Alert.alert('Login failed');
+        }
+      } catch (error) {
+        // Handle error during login
+        Alert.alert('Error during login');
       }
     }
   };

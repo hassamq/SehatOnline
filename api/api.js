@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = ' http://192.168.10.8:3000'; // Replace with your actual API base URL
+const API_BASE_URL = 'http://192.168.10.8:3000'; // Replace with your actual API base URL
 
 export const registerUser = async (userData) => {
   try {
@@ -15,8 +15,16 @@ export const registerUser = async (userData) => {
   }
 };
 
-// Add more API functions for other endpoints as needed
+export const loginUser = async (userData) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/api/users/login`, userData);
+    return response.data;
+  } catch (error) {
+    throw new Error('Error logging in');
+  }
+};
 
 export default {
   registerUser,
+  loginUser,
 };
