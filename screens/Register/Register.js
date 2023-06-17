@@ -10,6 +10,7 @@ import {
   Keyboard,
   ScrollView,
   Image,
+  
 } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import Spacing from "../../Constants/spacing";
@@ -75,25 +76,43 @@ const Register = ({ navigation }) => {
         alert("Permission to access camera roll is required!");
         return;
       }
-
+  
       const pickerResult = await ImagePicker.launchImageLibraryAsync();
-      if (pickerResult.canceled) {
+      if (pickerResult.cancelled) {
         return;
       }
-
+//  const imageUri = pickerResult.assets[0].uri;
       setSelectedImage(pickerResult);
     } catch (error) {
       console.log("Error selecting image:", error);
     }
   };
-
-  const Submit_btn = () => {
+  
+  const Submit_btn = async () => {
     if (email === "" || password === "" || confirmPassword === "" || username === "") {
       alert("Enter all information");
-    } else if (!emailError && !passwordError && !confirmPasswordError) {
-      console.log("Success!");
-      // Perform the form submission here
-      navigation.navigate("Home");
+    } else if (!emailError && !passwordError && !confirmPasswordError && selectedImage) {
+      // console.log()
+      try {
+        const formData = new FormData();
+        formData.append("email", email);
+        formData.append("password", password);
+        formData.append("confirmPassword", confirmPassword);
+        formData.append("username", username);
+        formData.append("image", {
+          uri: selectedImage.assets[0].uri,
+          name: "image.jpg",
+          type: "image/jpeg",
+        });
+  
+        await api.registerUser(formData);
+        console.log("Success!");
+        // Perform the necessary actions after successful registration
+         navigation.navigate("DrawerMenu");
+      } catch (error) {
+        console.log("Error registering user:", error);
+        // Handle the error, e.g., show an error message
+      }
     }
   };
 
