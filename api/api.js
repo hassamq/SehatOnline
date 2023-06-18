@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://192.168.10.8:3000'; // Replace with your actual API base URL
+const API_BASE_URL = 'http://192.168.10.3:3000'; // Replace with your actual API base URL
 
 export const registerUser = async (userData) => {
   try {

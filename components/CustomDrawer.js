@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useContext} from "react";
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -13,6 +13,8 @@ import {
   StyleSheet,
 } from "react-native";
 
+import { UserContext } from "../context/UserContext";
+
 import { useNavigation } from "@react-navigation/native"; // Import the useNavigation hook
 
 import MainHome from "../screens/Home/Home";
@@ -25,6 +27,8 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 
 const CustomDrawer = (props) => {
   const navigation = useNavigation();
+  const { email, username, image } = useContext(UserContext);
+  const imageUrl = `http://192.168.10.3:3000/uploads/users/${image}`;
 
   const handleLogout = () => {
     // Navigate to the screen named "Login"
@@ -40,7 +44,7 @@ const CustomDrawer = (props) => {
         >
           <View style={{ alignItems: "flex-start" }}>
             <Image
-              source={require("../assets/images/profile.jpg")}
+             source={{ uri: imageUrl }}
               style={{
                 height: 90,
                 width: 90,
@@ -51,7 +55,7 @@ const CustomDrawer = (props) => {
               }}
             />
 
-            <Text style={styles.Bigtitle}>Jane</Text>
+            <Text style={styles.Bigtitle}>{username}</Text>
           </View>
         </ImageBackground>
       </View>

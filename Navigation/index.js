@@ -1,10 +1,18 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesome } from "@expo/vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+
+
+ import AsyncStorage from "@react-native-async-storage/async-storage";
+
+ // Import User Context
+import { UserContext } from "../context/UserContext";
+
+
 import Ionicon from "react-native-vector-icons/Ionicons";
 import ProfileScreen from "../screens/Profile/ProfileScreen";
 
@@ -45,7 +53,36 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
-function StackNavigator() {
+const StackNavigator = () => {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [image, setImage] = useState('');
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const email = await AsyncStorage.getItem('Email');
+        const image = await AsyncStorage.getItem('Image');
+        const username = await AsyncStorage.getItem('Username');
+        setEmail(email || '');
+        setImage(image || '');
+        setUsername(username || '');
+      } catch (error) {
+        console.log('Error loading user data:', error);
+      }
+    };
+
+    loadUser();
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      setEmail('');
+      setImage('');
+      setUsername('');
+    };
+  }, []);
+
   return (
     <NavigationContainer independent={true} theme={theme}>
       <Stack.Navigator
@@ -80,7 +117,26 @@ function Doctorstack() {
 }
 
 export const DrawerMenu = ({ navigation, route }) => {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [image, setImage] = useState("");
+  useEffect(() => {
+    const loadUser = async () => {
+      const email = await AsyncStorage.getItem("Email");
+      const image = await AsyncStorage.getItem("Image");
+      const username = await AsyncStorage.getItem("Username");
+      setEmail(email);
+      setImage(image);
+      setUsername(username);
+    };
+    loadUser();
+  }, []);
+
+
   return (
+    <UserContext.Provider
+    value={{ email, setEmail, image, setImage, username, setUsername }}
+  >
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawer {...props} />}
       screenOptions={{
@@ -143,6 +199,7 @@ export const DrawerMenu = ({ navigation, route }) => {
       <Drawer.Screen name="LabTest" component={LabTest}/>
       <Drawer.Screen name="LabTestPayment" component={LabTestPayment}/>
     </Drawer.Navigator>
+    </UserContext.Provider>
   );
 };
 
@@ -150,7 +207,27 @@ export const BottomTabNavigation = ({ navigation, route }) => {
   const activeTintColor = "black";
   const inactiveTintColor = "black";
 
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [image, setImage] = useState("");
+  useEffect(() => {
+    const loadUser = async () => {
+      const email = await AsyncStorage.getItem("Email");
+      const image = await AsyncStorage.getItem("Image");
+      const username = await AsyncStorage.getItem("Username");
+      setEmail(email);
+      setImage(image);
+      setUsername(username);
+    };
+    loadUser();
+  }, []);
+
+ 
+
   return (
+    <UserContext.Provider
+    value={{ email, setEmail, image, setImage, username, setUsername }}
+  >
     <Tab.Navigator
       initialRouteName="Home1"
       screenOptions={({ route }) => ({
@@ -255,6 +332,7 @@ export const BottomTabNavigation = ({ navigation, route }) => {
         options={{ tabBarLabel: "" }}
       />
     </Tab.Navigator>
+    </UserContext.Provider>
   );
 };
 

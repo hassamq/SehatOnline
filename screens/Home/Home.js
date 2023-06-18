@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   Button,
 } from "react-native";
-import React from "react";
+import React, { useState, useEffect, useContext, useLayoutEffect} from "react";
 
 import Spacing from "../../Constants/spacing";
 import FontSize from "../../Constants/FontSize";
@@ -23,7 +23,14 @@ import Card from "./Card";
 import DoctorCard from "./DoctorCard";
 import { LinearGradient } from "expo-linear-gradient";
 
+
+
+import { UserContext } from "../../context/UserContext";
+
 export default function Home({ navigation }) {
+  const { email, username, image } = useContext(UserContext);
+  const imageUrl = `http://192.168.10.3:3000/uploads/users/${image}`;
+  console.log(imageUrl)
   const Doctordata = [
     {
       id: "1",
@@ -116,14 +123,11 @@ export default function Home({ navigation }) {
       {/* Header */}
       <View style={styles.header} flexDirection="row">
         <View style={styles.imageContainer}>
-          <Image
-            source={require("../../assets/images/profile.jpg")}
-            style={styles.Image}
-          />
+        <Image source={{ uri: imageUrl }} style={styles.Image} />
         </View>
 
         <View style={styles.title}>
-          <Text style={styles.Bigtitle}>Hi,Jane</Text>
+          <Text style={styles.Bigtitle}>Hi,{username}</Text>
           <Text style={styles.Smalltitle}>Jan 10,2023</Text>
         </View>
         <View flexDirection="row">

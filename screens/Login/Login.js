@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,7 +8,11 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
+  ActivityIndicator
+  
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Spacing from "../../Constants/spacing";
 import FontSize from "../../Constants/FontSize";
 import Colors from "../../Constants/colors";
@@ -28,6 +32,7 @@ const Login = ({ navigation }) => {
 
   const [emailError, setEmailError] = React.useState("");
   const [passwordError, setPasswordError] = React.useState("");
+  const [loading, setLoading] = useState(false);
 
   const validateEmail = (email) => {
     // A basic email validation function
@@ -57,12 +62,21 @@ const Login = ({ navigation }) => {
       Alert.alert('Enter all info');
     } else if (!emailError && !passwordError) {
       try {
+        setLoading(true); // Set loading state to true
+
         const userData = { email, password };
         const response = await api.loginUser(userData);
-  
+
         // Check if login was successful
         if (response.token) {
-          // Login successful, navigate to the desired screen
+          console.log(response.token)
+          // Login successful, save user data to AsyncStorage
+          await AsyncStorage.setItem('AccessToken', response.token);
+          await AsyncStorage.setItem('Username', response.user.username);
+          await AsyncStorage.setItem('Email', response.user.email);
+          await AsyncStorage.setItem('Image', response.user.image);
+
+          // Navigate to the desired screen
           navigation.navigate('DrawerMenu');
         } else {
           // Login failed, show error message
@@ -72,6 +86,7 @@ const Login = ({ navigation }) => {
         // Handle error during login
         Alert.alert('Error during login');
       }
+      setLoading(false)
     }
   };
 
@@ -111,23 +126,27 @@ const Login = ({ navigation }) => {
 
             {/* Sign in */}
             <TouchableOpacity
-              style={{
-                padding: Spacing * 2,
-                backgroundColor: Colors.primary,
-                marginVertical: Spacing * 3,
-                borderRadius: Spacing,
-                shadowColor: Colors.primary,
-                shadowOffset: {
-                  width: 0,
-                  height: Spacing,
-                },
-                shadowOpacity: 0.3,
-              }}
-            >
-              <Text style={styles.signinbtn} onPress={Submit_btn}>
-                Sign in
-              </Text>
-            </TouchableOpacity>
+      style={{
+        padding: Spacing * 2,
+        backgroundColor: Colors.primary,
+        marginVertical: Spacing * 3,
+        borderRadius: Spacing,
+        shadowColor: Colors.primary,
+        shadowOffset: {
+          width: 0,
+          height: Spacing,
+        },
+        shadowOpacity: 0.3,
+      }}
+      onPress={Submit_btn} // Use the updated login function
+      disabled={loading} // Disable the button while loading is true
+    >
+      {loading ? ( // Conditionally render the activity indicator
+        <ActivityIndicator color={Colors.white} size="small" />
+      ) : (
+        <Text style={styles.signinbtn}>Sign in</Text>
+      )}
+    </TouchableOpacity>
 
             {/* Sign up */}
 
