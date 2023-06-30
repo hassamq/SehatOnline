@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext, useLayoutEffect} from "react";
 import {
   View,
   Text,
@@ -15,8 +15,16 @@ import Fonts from "../../Constants/Fonts";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import AppTextInput from "../../components/AppTextInput";
 
+import { UserContext } from "../../context/UserContext";
+import api from "../../api/api";
+
+
+
 export default function HomeSamplingPaymentScreen({ navigation, route }) {
-  const { selectedTests } = route.params;
+  const { email, username, image } = useContext(UserContext);
+  
+  const { selectedTests,selectedSchedule } = route.params;
+
   const title = "Payment";
   const previosScreen = "LabTest";
   const [loading, setLoading] = useState(false);
@@ -38,14 +46,27 @@ export default function HomeSamplingPaymentScreen({ navigation, route }) {
     return total;
   };
 
-  const handlePayLater = () => {
+  const handlePayLater = async () => {
     setLoading(true);
 
-    // Simulating a delay for demonstration purposes
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const response = await api.bookLabTest(selectedTests,{
+        name: contactDetails.name,
+        phoneNumber: contactDetails.phoneNumber,
+        email: email, // Use the email from the user context
+        location: contactDetails.location,
+      },selectedSchedule);
+
+      // Handle the response or show a success message
+      console.log(response);
       setPaymentConfirmed(true);
-    }, 2000);
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Something Went Wrong")
+      // Handle the error or show an error message
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleContinue = () => {

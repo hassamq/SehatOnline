@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext, useLayoutEffect} from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   TextInput,
   ScrollView,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import Header from "../../components/Header";
 import Spacing from "../../Constants/spacing";
@@ -14,6 +15,8 @@ import Colors from "../../Constants/colors";
 import Fonts from "../../Constants/Fonts";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import AppTextInput from "../../components/AppTextInput";
+import { UserContext } from "../../context/UserContext";
+import api from "../../api/api";
 
 export default function HomeSamplingPaymentScreen({ navigation, route }) {
   const { selectedTests } = route.params;
@@ -28,6 +31,9 @@ export default function HomeSamplingPaymentScreen({ navigation, route }) {
   });
   const [totalPrice, setTotalPrice] = useState(0);
 
+  const { email, username, image } = useContext(UserContext);
+  const imageUrl = `http://192.168.10.11:3000/uploads/users/${image}`;
+  
   // Calculate the total price of selected tests
   const calculateTotalPrice = () => {
     let total = 0;
@@ -38,14 +44,27 @@ export default function HomeSamplingPaymentScreen({ navigation, route }) {
     return total;
   };
 
-  const handlePayLater = () => {
+  const handlePayLater = async () => {
     setLoading(true);
 
-    // Simulating a delay for demonstration purposes
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const response = await api.bookHomeSampling(selectedTests, {
+        name: contactDetails.name,
+        phoneNumber: contactDetails.phoneNumber,
+        email: email, // Use the email from the user context
+        location: contactDetails.location,
+      });
+
+      // Handle the response or show a success message
+      console.log(response);
       setPaymentConfirmed(true);
-    }, 2000);
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Something Went Wrong")
+      // Handle the error or show an error message
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleContinue = () => {
@@ -88,68 +107,65 @@ export default function HomeSamplingPaymentScreen({ navigation, route }) {
     <>
       <Header data={title} pre={previosScreen} />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-      {loading ? (
-            <ActivityIndicator size="large" color={"black"} />
-          ) : (
-        <View style={styles.container}>
-          <View style={styles.testDetailsContainer}>
-            <Text style={styles.sectionTitle}>Home Sampling Test Details</Text>
-            <View style={styles.testListContainer}>
-              {selectedTests.map((test) => (
-                <View key={test.id} style={styles.testItemContainer}>
-                  <Text style={styles.testName}>{test.name}</Text>
-                  <Text style={styles.testPrice}>Price: {test.price}</Text>
-                </View>
-              ))}
+        {loading ? (
+          <ActivityIndicator size="large" color={"black"} />
+        ) : (
+          <View style={styles.container}>
+            <View style={styles.testDetailsContainer}>
+              <Text style={styles.sectionTitle}>Home Sampling Test Details</Text>
+              <View style={styles.testListContainer}>
+                {selectedTests.map((test) => (
+                  <View key={test.id} style={styles.testItemContainer}>
+                    <Text style={styles.testName}>{test.name}</Text>
+                    <Text style={styles.testPrice}>Price: {test.price}</Text>
+                  </View>
+                ))}
+              </View>
+              <Text style={styles.totalPrice}>
+                Total Price: {calculateTotalPrice()} PKR
+              </Text>
             </View>
-            <Text style={styles.totalPrice}>
-              Total Price: {calculateTotalPrice()} PKR
-            </Text>
+            <Text style={styles.sectionTitle}>Contact Details</Text>
+            <AppTextInput
+              style={styles.contactInput}
+              value={contactDetails.name}
+              onChangeText={(text) =>
+                setContactDetails({ ...contactDetails, name: text })
+              }
+              placeholder="Enter your name"
+              autoCapitalize="words"
+            />
+            <AppTextInput
+              style={styles.contactInput}
+              value={contactDetails.phoneNumber}
+              onChangeText={(text) =>
+                setContactDetails({ ...contactDetails, phoneNumber: text })
+              }
+              placeholder="Enter your phone number"
+              keyboardType="phone-pad"
+            />
+            <AppTextInput
+              style={styles.contactInput}
+              value={contactDetails.location}
+              onChangeText={(text) =>
+                setContactDetails({ ...contactDetails, location: text })
+              }
+              placeholder="Enter your location"
+              autoCapitalize="words"
+            />
+            <TouchableOpacity
+              style={[
+                styles.payLaterButton,
+                !isContactDetailsValid() && styles.disabledPayLaterButton,
+              ]}
+              onPress={handlePayLater}
+              disabled={!isContactDetailsValid() || loading}
+            >
+              <FontAwesome name="credit-card" size={24} color={"white"} />
+              <Text style={styles.payLaterText}>Pay Later</Text>
+            </TouchableOpacity>
           </View>
-          <Text style={styles.sectionTitle}>Contact Details</Text>
-          <AppTextInput
-            style={styles.contactInput}
-            value={contactDetails.name}
-            onChangeText={(text) =>
-              setContactDetails({ ...contactDetails, name: text })
-            }
-            placeholder="Enter your name"
-            
-            autoCapitalize="words"
-          />
-          <AppTextInput
-            style={styles.contactInput}
-            value={contactDetails.phoneNumber}
-            onChangeText={(text) =>
-              setContactDetails({ ...contactDetails, phoneNumber: text })
-            }
-            placeholder="Enter your phone number"
-            
-            keyboardType="phone-pad"
-          />
-          <AppTextInput
-            style={styles.contactInput}
-            value={contactDetails.location}
-            onChangeText={(text) =>
-              setContactDetails({ ...contactDetails, location: text })
-            }
-            placeholder="Enter your location"
-            
-            autoCapitalize="words"
-          />
-          <TouchableOpacity
-            style={[
-              styles.payLaterButton,
-              !isContactDetailsValid() && styles.disabledPayLaterButton,
-            ]}
-            onPress={handlePayLater}
-            disabled={!isContactDetailsValid() || loading}
-          >
-            <FontAwesome name="credit-card" size={24} color={"white"} />
-            <Text style={styles.payLaterText}>Pay Later</Text>
-          </TouchableOpacity>
-        </View>
-          )}
+        )}
       </ScrollView>
     </>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext, useLayoutEffect} from "react";
 import {
   SafeAreaView,
   Text,
@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import Spacing from "../../Constants/spacing";
 import FontSize from "../../Constants/FontSize";
@@ -15,25 +16,50 @@ import Colors from "../../Constants/colors";
 import Fonts from "../../Constants/Fonts";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Header from "../../components/Header";
+import api from "../../api/api";
+import { UserContext } from "../../context/UserContext";
+
 
 export default function Payment({ route,navigation }) {
+  const { email, username, image } = useContext(UserContext);
   const title = "Payment";
   const previosScreen = "Medicine";
   const [loading, setLoading] = useState(false);
   const [appointmentBooked, setAppointmentBooked] = useState(false);
-  const [prescriptionImage, setPrescriptionImage] = useState(null);
-//   console.log(route.params.prescriptionImage)
+ 
+  //  console.log(route.params.prescriptionImage)
 
-  const handlePayLater = () => {
+  const prescriptionImage=route.params.prescriptionImage;
+  const phoneNumber=route.params.phoneNumber;
+  const address=route.params.address;
+
+  const handlePayLater = async () => {
     setLoading(true);
-
-    // Simulating a delay for demonstration purposes
-    setTimeout(() => {
+  
+    try {
+      const formData = new FormData();
+      formData.append("prescriptionImage", {
+        uri: prescriptionImage,
+        name: "image.jpg",
+        type: "image/jpeg",
+      });
+      formData.append("email", email);
+      formData.append("phone", phoneNumber);
+      formData.append("address", address);
+      
+  
+      await api.bookMedicineDelivery(formData);
+  
       setLoading(false);
       setAppointmentBooked(true);
-    }, 2000);
+      console.log("Success!");
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+      Alert.alert("Something Went Wrong!");
+    }
   };
-
+  
   const handleContinue = () => {
     // Implement logic to navigate to the next screen or reset the app state
     setAppointmentBooked(false);

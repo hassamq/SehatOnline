@@ -1,88 +1,96 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
-import Checkbox from "../../components/Checkbox";
+import React, { useState} from "react";
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Alert,ActivityIndicator } from "react-native";
+import api from "../../api/api";
 import Colors from "../../Constants/colors";
 import Spacing from "../../Constants/spacing";
 import FontSize from "../../Constants/FontSize";
 import Fonts from "../../Constants/Fonts";
+import Header from "../../components/Header"
+import { ScrollView } from "react-native-gesture-handler";
 
 const SymptomsChecker = () => {
-  const [symptoms, setSymptoms] = useState({
-    fever: false,
-    cough: false,
-    headache: false,
-    fatigue: false,
-    // Add more symptoms here...
-  });
+  const title = "AI Checker";
+  const previosScreen = null;
+  const [symptoms, setSymptoms] = useState([]);
+  const [diagnosis, setDiagnosis] = useState("");
+  const [loading,setLoading]=useState("")
 
-  const handleCheckboxPress = (key) => {
-    setSymptoms((prevSymptoms) => ({
-      ...prevSymptoms,
-      [key]: !prevSymptoms[key],
-    }));
+  const addSymptomField = () => {
+    setSymptoms((prevSymptoms) => [...prevSymptoms, ""]);
   };
 
-  const handleCheckSymptoms = () => {
-    // Prepare the symptoms data to send to the AI backend
-    const selectedSymptoms = Object.keys(symptoms).filter(
-      (key) => symptoms[key]
-    );
+  const removeSymptomField = (index) => {
+    setSymptoms((prevSymptoms) => prevSymptoms.filter((_, i) => i !== index));
+  };
 
-    // Send the symptoms data to the backend for AI processing
-    // You can make an API request to your backend service here
+  const handleSymptomChange = (value, index) => {
+    setSymptoms((prevSymptoms) => {
+      const updatedSymptoms = [...prevSymptoms];
+      updatedSymptoms[index] = value;
+      return updatedSymptoms;
+    });
+  };
 
-    // Example API request using fetch:
-    fetch("https://your-backend-api/check-symptoms", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ symptoms: selectedSymptoms }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // Process the AI response
-        // Display the diagnosis or suggestion to the user
-        Alert.alert("AI Diagnosis", data.diagnosis);
-      })
-      .catch((error) => {
-        console.error("Error checking symptoms:", error);
-        // Handle the error gracefully
-        Alert.alert("Error", "An error occurred while checking symptoms.");
-      });
+  const handleCheckSymptoms = async () => {
+    try {
+      
+      setLoading(true);
+      // Send the symptoms data to the backend for AI processing
+      const response = await api.checkSymptoms(symptoms);
+
+      // Process the AI response
+      // Update the diagnosis state with the response
+      setDiagnosis(response.reply);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error checking symptoms:", error);
+      // Handle the error gracefully
+      Alert.alert("Error", "An error occurred while checking symptoms.");
+    }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Symptoms Checker</Text>
-      <Text style={styles.subtitle}>Select the symptoms you're experiencing:</Text>
+    <>
+      <Header data={title} pre={previosScreen} />
+      <ScrollView>
+      <View style={styles.container}>
+        <Text style={styles.title}>Symptoms Checker</Text>
+        <Text style={styles.subtitle}>Enter the symptoms you're experiencing:</Text>
 
-      <Checkbox
-        label="Fever"
-        checked={symptoms.fever}
-        onPress={() => handleCheckboxPress("fever")}
-      />
-      <Checkbox
-        label="Cough"
-        checked={symptoms.cough}
-        onPress={() => handleCheckboxPress("cough")}
-      />
-      <Checkbox
-        label="Headache"
-        checked={symptoms.headache}
-        onPress={() => handleCheckboxPress("headache")}
-      />
-      <Checkbox
-        label="Fatigue"
-        checked={symptoms.fatigue}
-        onPress={() => handleCheckboxPress("fatigue")}
-      />
-      {/* Add more checkboxes for other symptoms */}
+        {symptoms.map((symptom, index) => (
+          <View key={index} style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              value={symptom}
+              onChangeText={(value) => handleSymptomChange(value, index)}
+              placeholder="Symptom"
+              placeholderTextColor={Colors.gray}
+            />
+            <TouchableOpacity onPress={() => removeSymptomField(index)} style={styles.removeButton}>
+              <Text style={styles.removeButtonText}>Remove</Text>
+            </TouchableOpacity>
+          </View>
+        ))}
 
-      <TouchableOpacity style={styles.checkButton} onPress={handleCheckSymptoms}>
-        <Text style={styles.checkButtonText}>Check Symptoms</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity style={styles.addButton} onPress={addSymptomField}>
+          <Text style={styles.addButtonText}>Add Symptom</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.checkButton} onPress={handleCheckSymptoms}>
+          <Text style={styles.checkButtonText}>Check Symptoms</Text>
+        </TouchableOpacity>
+
+        {loading ? (
+          <ActivityIndicator style={styles.activityIndicator} color={Colors.primary} size="large" />
+        ) : null}
+
+        {diagnosis ? (
+          <Text style={styles.diagnosisText}>Diagnosis: {diagnosis}</Text>
+        ) : null}
+      </View>
+      </ScrollView>
+
+    </>
   );
 };
 
@@ -94,25 +102,73 @@ const styles = StyleSheet.create({
   title: {
     fontSize: FontSize.large,
     fontFamily: Fonts["poppins-bold"],
-    marginBottom: Spacing.medium,
+    marginBottom: Spacing,
   },
   subtitle: {
     fontSize: FontSize.medium,
     fontFamily: Fonts["poppins-regular"],
     marginBottom: Spacing.medium,
   },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: Spacing,
+  },
+  input: {
+    flex: 1,
+    borderWidth: 0.75,
+    borderColor: Colors.primary,
+    borderRadius: 10,
+    padding: 8,
+    marginRight: Spacing.small,
+    fontSize: FontSize.medium,
+    fontFamily: Fonts["poppins-regular"],
+  },
+  removeButton: {
+    backgroundColor: Colors.primary,
+    borderRadius: 4,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    marginLeft: 10,
+  },
+  removeButtonText: {
+    color: "white",
+    fontSize: FontSize.small,
+    fontFamily: Fonts["poppins-regular"],
+  },
+  addButton: {
+    backgroundColor: "orange",
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    marginTop: Spacing,
+  },
+  addButtonText: {
+    color: "black",
+    fontSize: FontSize.medium,
+    fontFamily: Fonts["poppins-bold"],
+    textAlign: "center",
+  },
   checkButton: {
     backgroundColor: Colors.primary,
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 24,
-    marginTop: Spacing.medium,
+    marginTop: Spacing,
   },
   checkButtonText: {
     color: "white",
     fontSize: FontSize.medium,
     fontFamily: Fonts["poppins-bold"],
     textAlign: "center",
+  },
+  diagnosisText: {
+    marginTop: Spacing,
+    fontSize: FontSize.medium,
+    fontFamily: Fonts["poppins-regular"],
+  },
+  activityIndicator: {
+    marginTop: Spacing*2,
   },
 });
 

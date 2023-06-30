@@ -29,8 +29,8 @@ import { UserContext } from "../../context/UserContext";
 
 export default function Home({ navigation }) {
   const { email, username, image } = useContext(UserContext);
-  const imageUrl = `http://192.168.10.3:3000/uploads/users/${image}`;
-  console.log(imageUrl)
+  const imageUrl = `http://192.168.10.11:3000/uploads/users/${image}`;
+  // console.log(imageUrl)
   const Doctordata = [
     {
       id: "1",
@@ -131,10 +131,10 @@ export default function Home({ navigation }) {
           <Text style={styles.Smalltitle}>Jan 10,2023</Text>
         </View>
         <View flexDirection="row">
-          <Image
+          {/* <Image
             source={require("../../assets/images/Notification.png")}
             style={styles.bell}
-          />
+          /> */}
 
           <Icon
             style={{
@@ -154,7 +154,7 @@ export default function Home({ navigation }) {
       {/* Banner */}
       <ScrollView>
         {/* Search */}
-        <View style={styles.searchcontainer}>
+        {/* <View style={styles.searchcontainer}>
           <View style={styles.inputContainer}>
             <Icon name="search" size={20} color={Colors.primary} />
             <TextInput
@@ -163,7 +163,7 @@ export default function Home({ navigation }) {
               placeholderTextColor="#b0c1d1"
             />
           </View>
-        </View>
+        </View> */}
         {/* Search End */}
         <View style={styles.screen}>
           <ImageBackground

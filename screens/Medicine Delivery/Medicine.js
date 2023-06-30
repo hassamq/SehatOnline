@@ -44,19 +44,18 @@ const Medicine = ({navigation}) => {
       return;
     }
 
-    // Place the order and perform necessary actions (e.g., API calls)
-    // You can implement the logic to send the order details to the server here
-    console.log("Phone Number:", phoneNumber);
-    console.log("Address:", address);
-    console.log("Prescription Image:", prescriptionImage);
-   navigation.navigate("MedicinePayment",{prescriptionImage})
+  
+    // console.log("Phone Number:", phoneNumber);
+    // console.log("Address:", address);
+    // console.log("Prescription Image:", prescriptionImage);
+   navigation.navigate("MedicinePayment",{prescriptionImage,phoneNumber,address})
   };
 
   async function pickImage() {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect:[10,10],
       quality: 1,
     });
 

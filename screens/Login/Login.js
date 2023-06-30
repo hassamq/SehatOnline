@@ -120,9 +120,9 @@ const Login = ({ navigation }) => {
               <Text style={styles.errorText}>{passwordError}</Text>
             </View>
 
-            <View>
+            {/* <View>
               <Text style={styles.forgotpswd}>Forgot your Password?</Text>
-            </View>
+            </View> */}
 
             {/* Sign in */}
             <TouchableOpacity
@@ -163,34 +163,6 @@ const Login = ({ navigation }) => {
               </Text>
             </TouchableOpacity>
 
-            {/* Other accounts */}
-            <View>
-              <Text style={styles.otherbtn}>Or continue with</Text>
-
-              <View
-                style={{
-                  marginTop: Spacing,
-                  flexDirection: "row",
-                  justifyContent: "center",
-                }}
-              >
-                <TouchableOpacity style={styles.social_icons}>
-                  <Icon name="google" size={Spacing * 2} color={Colors.text} />
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.social_icons}>
-                  <Icon name="apple" size={Spacing * 2} color={Colors.text} />
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.social_icons}>
-                  <Icon
-                    name="facebook"
-                    size={Spacing * 2}
-                    color={Colors.text}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
           </View>
         </ScrollView>
       </SafeAreaView>
