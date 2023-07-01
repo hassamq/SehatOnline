@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext, useLayoutEffect} from "react";
 import {
   SafeAreaView,
   Text,
@@ -15,23 +15,48 @@ import Colors from "../../Constants/colors";
 import Fonts from "../../Constants/Fonts";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Header from "../../components/Header";
+import api from "../../api/api";
 
-export default function Appointments({ navigation }) {
+import { UserContext } from "../../context/UserContext";
+
+export default function Appointments({route, navigation }) {
   const title = "Payment";
-  const previosScreen = "AppointmentScreen";
+  const previosScreen = null;
   const [loading, setLoading] = useState(false);
   const [appointmentBooked, setAppointmentBooked] = useState(false);
+  const { email, username, image } = useContext(UserContext);
+  const selectedSlot=route.params.selectedSlot;
+  const doctor=route.params.doctor
 
-  const handlePayLater = () => {
+  const handlePayLater = async () => {
     setLoading(true);
-
-    // Simulating a delay for demonstration purposes
-    setTimeout(() => {
-      setLoading(false);
+  
+    try {
+      // Create an appointment object with the required data
+      const appointmentData = {
+        userName: username,
+        userEmail: email,
+        doctorName: doctor.name,
+        doctorEmail: doctor.email,
+        time: selectedSlot.time,
+        day: selectedSlot.day,
+        status: 'Pending', 
+      };
+      console.log(appointmentData)
+  
+      // Call the bookAppointment function to make the appointment booking
+      await api.bookAppointment(appointmentData);
+  
+      // Appointment booked successfully
+    
       setAppointmentBooked(true);
-    }, 2000);
+      setLoading(false);
+    } catch (error) {
+      // Handle the error
+      console.log(error);
+      setLoading(false);
+    }
   };
-
   const handleContinue = () => {
     // Implement logic to navigate to the next screen or reset the app state
     setAppointmentBooked(false);
