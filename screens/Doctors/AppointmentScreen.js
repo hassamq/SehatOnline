@@ -8,32 +8,32 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import Header from "../../components/Header";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-
-const AppointmentScreen = ({ navigation }) => {
+const AppointmentScreen = ({ route, navigation }) => {
   const title = "Appointment";
   const previosScreen = "Doctors";
+  const { doctor } = route.params;
   const [timeSlots, setTimeSlots] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState(null);
 
-  // Fetch available time slots from the server
   useEffect(() => {
     setSelectedSlot(null);
-    fetchTimeSlots(); // Implement your own function to fetch time slots
+    fetchTimeSlots();
   }, []);
 
   const fetchTimeSlots = () => {
-    // Implement your API call to fetch available time slots
-    // Update the 'timeSlots' state with the response data
-    const response = [
-      { id: 1, day: 'Monday', time: '09:00 AM' },
-      { id: 2, day: 'Tuesday', time: '10:00 AM' },
-      { id: 3, day: 'Wednesday', time: '11:00 AM' },
-      { id: 4, day: 'Thursday', time: '01:00 PM' },
-      { id: 5, day: 'Friday', time: '02:00 PM' },
-      // Add more time slots as per your data
-    ];
-    setTimeSlots(response);
+    // Extract the availability data from the doctor parameter
+    const availability = doctor.availability;
+
+    // Create time slots array based on availability data
+    const slots = availability.map((slot) => ({
+      id: slot._id,
+      day: slot.day,
+      time: `${slot.startTime} - ${slot.endTime}`,
+    }));
+
+    setTimeSlots(slots);
   };
+
   const handleSlotSelection = (slot) => {
     if (selectedSlot && selectedSlot.id === slot.id) {
       // Clicked on the selected slot, unselect it
@@ -78,14 +78,19 @@ const AppointmentScreen = ({ navigation }) => {
           renderItem={renderTimeSlot}
         />
        
-        <TouchableOpacity style={styles.button} onPress={handlePayment}  >
-                <Ionicons name="calendar-outline" size={25} color="#fff" />
-                <Text style={styles.buttonText} >Proceed to Payment</Text>
-              </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handlePayment}>
+          <Ionicons name="calendar-outline" size={25} color="#fff" />
+          <Text style={styles.buttonText}>Proceed to Payment</Text>
+        </TouchableOpacity>
       </View>
     </>
   );
 };
+
+
+
+
+
 
 
 const styles = StyleSheet.create({
@@ -105,7 +110,8 @@ const styles = StyleSheet.create({
    
   },
   selectedTimeSlot: {
-    backgroundColor: Colors.primary, // Change the color as desired
+    backgroundColor: "orange", 
+    borderRadius:10
     
   },
   day: {

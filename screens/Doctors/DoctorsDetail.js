@@ -23,7 +23,7 @@ const DoctorsDetail = ({ route, navigation }) => {
   const { doctor } = route.params;
 
   const HandleAppointment=()=>{
-navigation.navigate("AppointmentScreen")
+navigation.navigate("AppointmentScreen",{doctor})
   };
   return (
     <View>

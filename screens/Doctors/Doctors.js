@@ -8,7 +8,8 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  Alert
+  Alert,
+  ActivityIndicator
 } from "react-native";
 import Spacing from "../../Constants/spacing";
 import FontSize from "../../Constants/FontSize";
@@ -111,7 +112,7 @@ const Doctors = () => {
 
   const onBookAppointment = () => {
     // handle Book an Appointment button press
-    navigation.navigate("AppointmentScreen")
+    navigation.navigate("AppointmentScreen",{doctor})
   };
 
 

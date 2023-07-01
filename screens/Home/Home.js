@@ -330,10 +330,10 @@ export default function Home({ navigation }) {
             horizontal
             data={doctors}
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
+            renderItem={({ item , index }) => (
               <View style={styles.DoctorcardContainer}>
                 <DoctorCard
-                key={item.id}
+                key={index}
                   name={item.name}
                   specialization={item.specialty}
                   image={`http://192.168.10.11:3000/uploads/Doctors/${item.image}`}
