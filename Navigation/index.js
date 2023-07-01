@@ -75,18 +75,18 @@ const StackNavigator = () => {
     loadUser();
   }, []);
 
-  useEffect(() => {
-    return () => {
-      setEmail('');
-      setImage('');
-      setUsername('');
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     setEmail('');
+  //     setImage('');
+  //     setUsername('');
+  //   };
+  // }, []);
 
   return (
     <NavigationContainer independent={true} theme={theme}>
       <Stack.Navigator
-        initialRouteName="Register"
+        initialRouteName="Login"
         screenOptions={{ headerShown: false, gestureEnabled: false }}
       >
         <Stack.Screen name="Welcome" component={WelcomeScreen} />

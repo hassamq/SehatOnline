@@ -10,8 +10,11 @@ import {
   StatusBar,
   TouchableOpacity,
   Button,
+  ActivityIndicator,
+  Alert
 } from "react-native";
 import React, { useState, useEffect, useContext, useLayoutEffect} from "react";
+import api from "../../api/api"
 
 import Spacing from "../../Constants/spacing";
 import FontSize from "../../Constants/FontSize";
@@ -28,39 +31,52 @@ import { LinearGradient } from "expo-linear-gradient";
 import { UserContext } from "../../context/UserContext";
 
 export default function Home({ navigation }) {
+  const [doctors, setDoctors] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const fetchDoctors = async () => {
+    try {
+      const response = await api.getAllDoctors();
+      setDoctors(response);
+      setLoading(false); // Set loading to false when data is fetched
+    } catch (error) {
+      console.log('Error fetching doctors:', error);
+      setLoading(false); // Set loading to false in case of error
+      Alert.alert("Something went wrong")
+    }
+  };
   const { email, username, image } = useContext(UserContext);
   const imageUrl = `http://192.168.10.11:3000/uploads/users/${image}`;
   // console.log(imageUrl)
-  const Doctordata = [
-    {
-      id: "1",
-      name: "Dr. John Doe",
-      specialization: "Cardiologist",
-      image:
-        "https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    },
-    {
-      id: "2",
-      name: "Dr. Jane Smith",
-      specialization: "Dermatologist",
-      image:
-        "https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    },
-    {
-      id: "3",
-      name: "Dr. Mike Johnson",
-      specialization: "Pediatrician",
-      image:
-        "https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    },
-    {
-      id: "4",
-      name: "Dr. Emily Jones",
-      specialization: "Ophthalmologist",
-      image:
-        "https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    },
-  ];
+  // const Doctordata = [
+  //   {
+  //     id: "1",
+  //     name: "Dr. John Doe",
+  //     specialization: "Cardiologist",
+  //     image:
+  //       "https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+  //   },
+  //   {
+  //     id: "2",
+  //     name: "Dr. Jane Smith",
+  //     specialization: "Dermatologist",
+  //     image:
+  //       "https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+  //   },
+  //   {
+  //     id: "3",
+  //     name: "Dr. Mike Johnson",
+  //     specialization: "Pediatrician",
+  //     image:
+  //       "https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+  //   },
+  //   {
+  //     id: "4",
+  //     name: "Dr. Emily Jones",
+  //     specialization: "Ophthalmologist",
+  //     image:
+  //       "https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+  //   },
+  // ];
 
   const data = [
     {
@@ -116,11 +132,22 @@ export default function Home({ navigation }) {
       },
     },
   ];
+  const onViewProfile = (doctor) => {
+    // handle View Profile button press
+    navigation.navigate("DoctorsDetail", { doctor });
+  };
+
+  useEffect(() => {
+    fetchDoctors();
+  }, []);
   
 
   return (
+    
     <SafeAreaView style={styles.container}>
       {/* Header */}
+      
+      
       <View style={styles.header} flexDirection="row">
         <View style={styles.imageContainer}>
         <Image source={{ uri: imageUrl }} style={styles.Image} />
@@ -149,9 +176,15 @@ export default function Home({ navigation }) {
           />
         </View>
       </View>
+      
       {/* Header end */}
 
       {/* Banner */}
+      {loading ? ( // Render activity indicator while loading
+        <View style={styles.activityContainer}>
+          <ActivityIndicator size="large" color={Colors.primary} />
+        </View>
+      ) : (
       <ScrollView>
         {/* Search */}
         {/* <View style={styles.searchcontainer}>
@@ -295,21 +328,25 @@ export default function Home({ navigation }) {
 
           <FlatList
             horizontal
-            data={Doctordata}
+            data={doctors}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <View style={styles.DoctorcardContainer}>
                 <DoctorCard
+                key={item.id}
                   name={item.name}
-                  specialization={item.specialization}
-                  image={item.image}
+                  specialization={item.specialty}
+                  image={`http://192.168.10.11:3000/uploads/Doctors/${item.image}`}
+                  onPress={() => onViewProfile(item)}
                 />
               </View>
             )}
             showsHorizontalScrollIndicator={false}
           />
         </View>
+        
       </ScrollView>
+      )}
     </SafeAreaView>
   );
 }

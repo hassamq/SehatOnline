@@ -38,27 +38,27 @@ navigation.navigate("AppointmentScreen")
             ></ImageBackground>
 
             <View style={styles.detailsContainer}>
-              <Image
-                source={{ uri: doctor.image }}
-                style={styles.profileImage}
-              />
+            <Image
+  source={{ uri: `http://192.168.10.11:3000/uploads/Doctors/${doctor.image}` }}
+  style={styles.profileImage}
+/>
 
               <Text style={styles.name}>{doctor.name}</Text>
-              <Text style={styles.education}>
+              {/* <Text style={styles.education}>
                 <Icon name="graduation-cap" size={20} color={Colors.primary} />{" "}
                 {doctor.education}
-              </Text>
+              </Text> */}
               <Text style={styles.specialization}>
                 <Icon name="stethoscope" size={20} color={Colors.primary} />{" "}
-                {doctor.specialization}
+                {doctor.specialty}
               </Text>
               <Text style={styles.experience}>
                 <Icon name="clock-o" size={20} color={Colors.primary} />{" "}
-                {doctor.experience} of experience
+                {doctor.experience} years of experience
               </Text>
 
               <View style={styles.bioContainer}>
-                <Text style={styles.bioText}>{doctor.bio}</Text>
+                <Text style={styles.bioText}>{doctor.description}</Text>
               </View>
 
               <TouchableOpacity style={styles.button} onPress={HandleAppointment} >
