@@ -16,6 +16,7 @@ const AppointmentScreen = ({ route, navigation }) => {
   const [timeSlots, setTimeSlots] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [doctor,setDoctor]=useState(null);
 
   const fetchTimeSlots = async () => {
     try {
@@ -25,6 +26,7 @@ const AppointmentScreen = ({ route, navigation }) => {
       }
       // Use the doctor's email to fetch the doctor's data
       const doctorData = await api.getDoctorByEmail(doctorEmail);
+      setDoctor(doctorData)
       // Extract the availability data from the doctorData
       const availability = doctorData.availability;
       // Create time slots array based on availability data
