@@ -26,7 +26,7 @@ export default function Appointments({route, navigation }) {
   const [appointmentBooked, setAppointmentBooked] = useState(false);
   const { email, username, image } = useContext(UserContext);
   const selectedSlot=route.params.selectedSlot;
-  const doctor=route.params.doctor
+  const doctor=route.params.doctor;
 
   const handlePayLater = async () => {
     setLoading(true);
@@ -85,6 +85,7 @@ export default function Appointments({route, navigation }) {
       </>
     );
   }
+
 
   return (
     <>

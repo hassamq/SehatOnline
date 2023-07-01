@@ -110,9 +110,9 @@ const Doctors = () => {
     navigation.navigate("DoctorsDetail", { doctor });
   };
 
-  const onBookAppointment = () => {
+  const onBookAppointment = (doctor) => {
     // handle Book an Appointment button press
-    navigation.navigate("AppointmentScreen",{doctor})
+    navigation.navigate("AppointmentScreen",{ doctor })
   };
 
 
@@ -140,7 +140,7 @@ const Doctors = () => {
               specialization={doctor.specialty}
               experience={doctor.experience}
               onViewProfile={() => onViewProfile(doctor)}
-              onBookAppointment={onBookAppointment}
+              onBookAppointment={onBookAppointment(doctor)}
             />
           ))}
         </ScrollView>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert, Button } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert, Button, ActivityIndicator } from 'react-native';
 import Spacing from "../../Constants/spacing";
 import FontSize from "../../Constants/FontSize";
 import Colors from "../../Constants/colors";
@@ -7,31 +7,38 @@ import Fonts from "../../Constants/Fonts";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Header from "../../components/Header";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import api from '../../api/api';
 
 const AppointmentScreen = ({ route, navigation }) => {
   const title = "Appointment";
-  const previosScreen = "Doctors";
-  const { doctor } = route.params;
+  const previosScreen = null;
+  const [doctorEmail, setDoctorEmail] = useState(null);
   const [timeSlots, setTimeSlots] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    setSelectedSlot(null);
-    fetchTimeSlots();
-  }, []);
-
-  const fetchTimeSlots = () => {
-    // Extract the availability data from the doctor parameter
-    const availability = doctor.availability;
-
-    // Create time slots array based on availability data
-    const slots = availability.map((slot) => ({
-      id: slot._id,
-      day: slot.day,
-      time: `${slot.startTime} - ${slot.endTime}`,
-    }));
-
-    setTimeSlots(slots);
+  const fetchTimeSlots = async () => {
+    try {
+      setLoading(true);
+      if (!doctorEmail) {
+        return;
+      }
+      // Use the doctor's email to fetch the doctor's data
+      const doctorData = await api.getDoctorByEmail(doctorEmail);
+      // Extract the availability data from the doctorData
+      const availability = doctorData.availability;
+      // Create time slots array based on availability data
+      const slots = availability.map((slot) => ({
+        id: slot._id,
+        day: slot.day,
+        time: `${slot.startTime} - ${slot.endTime}`,
+      }));
+      // Set the new time slots
+      setTimeSlots(slots);
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
   };
 
   const handleSlotSelection = (slot) => {
@@ -47,7 +54,7 @@ const AppointmentScreen = ({ route, navigation }) => {
   const handlePayment = () => {
     if (selectedSlot) {
       // Navigate to the payment screen
-      navigation.navigate('Payment');
+      navigation.navigate('Payment', { doctor, selectedSlot });
     } else {
       // Display an alert if no time slot is selected
       Alert.alert('Error', 'Please select a time slot.');
@@ -67,17 +74,37 @@ const AppointmentScreen = ({ route, navigation }) => {
     </TouchableOpacity>
   );
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      // Get the latest email from route.params
+      const { email } = route.params;
+      // Update the doctorEmail state with the latest email
+      setDoctorEmail(email);
+    });
+
+    return unsubscribe;
+  }, [navigation, route.params]);
+
+  useEffect(() => {
+    fetchTimeSlots();
+  }, [doctorEmail]);
+
   return (
     <>
       <Header data={title} pre={previosScreen} />
       <View style={styles.container}>
         <Text style={styles.title}>Select a time slot:</Text>
-        <FlatList
-          data={timeSlots}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={renderTimeSlot}
-        />
-       
+        {loading ? (
+          <View style={styles.activityContainer}>
+            <ActivityIndicator size="large" color={Colors.primary} />
+          </View>
+        ) : (
+          <FlatList
+            data={timeSlots}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={renderTimeSlot}
+          />
+        )}
         <TouchableOpacity style={styles.button} onPress={handlePayment}>
           <Ionicons name="calendar-outline" size={25} color="#fff" />
           <Text style={styles.buttonText}>Proceed to Payment</Text>
@@ -86,12 +113,6 @@ const AppointmentScreen = ({ route, navigation }) => {
     </>
   );
 };
-
-
-
-
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -107,22 +128,20 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#CCCCCC',
-   
   },
   selectedTimeSlot: {
-    backgroundColor: "orange", 
-    borderRadius:10
-    
+    backgroundColor: "orange",
+    borderRadius: 20,
   },
   day: {
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 4,
-    marginLeft:20
+    marginLeft: 20,
   },
   time: {
     fontSize: 16,
-    marginLeft:20
+    marginLeft: 20,
   },
   button: {
     flexDirection: "row",
@@ -131,7 +150,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
     paddingVertical: Spacing * 1.5,
     paddingHorizontal: Spacing * 2,
-    // width: "50%",
     borderRadius: Spacing,
     shadowColor: Colors.primary,
     shadowOffset: {

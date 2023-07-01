@@ -96,6 +96,42 @@ export const getDoctorsBySpecialty = async (specialty) => {
   }
 };
 
+export const bookAppointment = async (appointmentData) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/api/appointment`, appointmentData);
+    return response.data;
+  } catch (error) {
+    throw new Error('Error booking appointment');
+  }
+};
+
+export const getAppointmentsByUserEmail = async (userEmail) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/api/appointment/user/${userEmail}`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Error getting appointments by user email');
+  }
+};
+
+export const getAppointmentsByDoctorEmail = async (doctorEmail) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/api/appointment/doctor/${doctorEmail}`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Error getting appointments by doctor email');
+  }
+};
+
+export const getDoctorByEmail = async (email) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/api/doctors/email/${email}`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Error getting doctor by email');
+  }
+};
+
 export default {
   URL,
   registerUser,
@@ -106,4 +142,8 @@ export default {
   checkSymptoms,
   getAllDoctors,
   getDoctorsBySpecialty,
+  bookAppointment,
+  getAppointmentsByUserEmail,
+  getAppointmentsByDoctorEmail,
+  getDoctorByEmail, 
 };

@@ -23,7 +23,7 @@ const Doctor_card = ({
             <Text style={styles.name}>{name}</Text>
             <Text style={styles.education}>{education}</Text>
             <Text style={styles.specialization}>{specialization}</Text>
-            <Text style={styles.experience}>{experience} of experience</Text>
+            <Text style={styles.experience}>{experience} years of experience</Text>
           </View>
         </View>
       </TouchableOpacity>
