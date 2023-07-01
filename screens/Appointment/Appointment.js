@@ -1,23 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext, useLayoutEffect} from "react";
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Header from "../../components/Header";
 import Colors from "../../Constants/colors";
 import Fonts from "../../Constants/Fonts";
 
+import { UserContext } from "../../context/UserContext";
+import api from "../../api/api";
+
 const Appointments = ({ navigation }) => {
+  const { email, username, image } = useContext(UserContext);
   const title = "Appointments";
   const previosScreen = null;
-  const [bookedAppointments, setBookedAppointments] = useState([
-    { id: 1, doctor: "Dr. John Doe", date: "June 15, 2023", time: "10:00 AM" },
-    { id: 2, doctor: "Dr. Jane Smith", date: "June 16, 2023", time: "2:00 PM" },
-    { id: 3, doctor: "Dr. Michael Johnson", date: "June 17, 2023", time: "9:30 AM" },
-    // Add more appointments as needed
-  ]);
-  const [previousAppointments, setPreviousAppointments] = useState([
-    { id: 4, doctor: "Dr. Sarah Thompson", date: "June 10, 2023", time: "3:00 PM" },
-    { id: 5, doctor: "Dr. Mark Wilson", date: "June 12, 2023", time: "11:30 AM" },
-    // Add more previous appointments as needed
-  ]);
+  const [bookedAppointments, setBookedAppointments] = useState([]);
+  const [previousAppointments, setPreviousAppointments] = useState([]);
 
   const renderAppointment = ({ item }) => (
   <View style={[styles.appointmentContainer, styles.upcomingAppointment]}>
@@ -26,6 +21,37 @@ const Appointments = ({ navigation }) => {
     {/* Display any other relevant information about the appointment */}
   </View>
 );
+const fetchAppointments = async () => {
+  try {
+    const response = await api.getAppointmentsByUserEmail(email);
+    const upcomingAppointments = [];
+    const previousAppointments = [];
+
+    response.forEach(appointment => {
+      if (appointment.status ==='Pending') {
+        console.log("added")
+        upcomingAppointments.push(appointment);
+      } else if (appointment.status === 'Completed') {
+        previousAppointments.push(appointment);
+      }
+    });
+
+    setBookedAppointments(upcomingAppointments);
+    setPreviousAppointments(previousAppointments);
+    
+    console.log(bookedAppointments);
+    console.log(previousAppointments)
+
+  } catch (error) {
+    console.log('Error fetching appointments:', error);
+    Alert.alert("Something went wrong");
+  }
+};
+
+
+useEffect(() => {
+  fetchAppointments();
+}, []);
 
 
   return (
@@ -39,8 +65,8 @@ const Appointments = ({ navigation }) => {
             <ScrollView>
               {bookedAppointments.map((appointment) => (
                 <View key={appointment.id} style={styles.upcomingappointmentContainer}>
-                  <Text style={styles.doctor}>{appointment.doctor}</Text>
-                  <Text style={styles.dateTime}>{appointment.date} at {appointment.time}</Text>
+                  <Text style={styles.doctor}>{appointment.doctorName}</Text>
+                  <Text style={styles.dateTime}>{appointment.day} at {appointment.time}</Text>
                 </View>
               ))}
             </ScrollView>
@@ -52,8 +78,8 @@ const Appointments = ({ navigation }) => {
             <ScrollView>
               {previousAppointments.map((appointment) => (
                 <View key={appointment.id} style={styles.appointmentContainer}>
-                  <Text style={styles.doctor}>{appointment.doctor}</Text>
-                  <Text style={styles.dateTime}>{appointment.date} at {appointment.time}</Text>
+                  <Text style={styles.doctor}>{appointment.doctorName}</Text>
+                  <Text style={styles.dateTime}>{appointment.day} at {appointment.time}</Text>
                 </View>
               ))}
             </ScrollView>
